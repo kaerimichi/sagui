@@ -50,4 +50,6 @@ Temporary Items
 # Project
 vendor/
 composer.lock
+var/logs
+var/cache/
 
