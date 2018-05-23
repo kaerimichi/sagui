@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Infrastructure\Services;
+namespace Infrastructure\Service;
 
 class TwigRenderer
 {
