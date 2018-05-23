@@ -57,9 +57,12 @@ return [
         );
 
         $pluginCollector = $c->get(PluginCollector::class);
-        /** @var array $item */
-        foreach ($pluginCollector as $plugin => $item) {
-            $routeCollector->addRoutesDefinition($item['path'].'/config/routes.php', $plugin);
+        /**
+         * @var string $name
+         * @var \Infrastructure\Plugin\Plugin $plugin
+         */
+        foreach ($pluginCollector as $name => $plugin) {
+            $routeCollector->addRoutesDefinition($plugin->getConfigPath().'/routes.php', $name);
         }
 
         return $routeCollector;
@@ -70,12 +73,12 @@ return [
         return $pluginCollector;
     },
     TwigRenderer::class => function(ContainerInterface $c) {
-        $templates = [\dirname(__DIR__, 3).'/themes/'.$c->get('theme')];
+        $templates = [$c->get('theme') => \dirname(__DIR__, 3).'/themes/'.$c->get('theme')];
 
         $pluginCollector = $c->get(PluginCollector::class);
-        /** @var array $item */
-        foreach ($pluginCollector as $plugin => $item) {
-            $templates[] = $item['path'].'/templates';
+        /** @var \Infrastructure\Plugin\Plugin $plugin */
+        foreach ($pluginCollector as $plugin) {
+            $templates[$plugin->getName()] = $plugin->getTemplatePath();
         }
 
         return new TwigRenderer($templates, ['cache' => \dirname(__DIR__, 3).'/var/cache']);
