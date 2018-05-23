@@ -14,10 +14,15 @@ class TwigRenderer
      * TwigRenderer constructor.
      * @param array $paths
      * @param array $options
+     * @throws \Twig_Error_Loader
      */
     public function __construct(array $paths, array $options)
     {
-        $loader = new \Twig_Loader_Filesystem($paths);
+        $loader = new \Twig_Loader_Filesystem([current($paths)]);
+        foreach ($paths as $namespace => $path) {
+            $loader->addPath($path, $namespace);
+        }
+
         $this->twig = new \Twig_Environment($loader, $options);
     }
 

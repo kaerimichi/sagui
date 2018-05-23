@@ -7,5 +7,8 @@ use Infrastructure\Plugin\Plugin;
 
 class Admin extends Plugin
 {
-
+    function getName(): string
+    {
+        return 'admin';
+    }
 }
