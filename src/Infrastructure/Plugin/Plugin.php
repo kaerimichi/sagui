@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Infrastructure\Plugin;
 
-abstract class Plugin
+abstract class Plugin implements PluginInterface
 {
     /**
      * @var string
@@ -19,11 +19,6 @@ abstract class Plugin
      * @var string
      */
     protected $configPath;
-
-    /**
-     * @return string
-     */
-    abstract function getName(): string;
 
     /**
      * @throws \ReflectionException
