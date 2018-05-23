@@ -2,9 +2,9 @@
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\ContainerInterface;
-use Infrastructure\App\RouteCollector;
-use Infrastructure\App\PluginCollector;
-use Infrastructure\Services\TwigRenderer;
+use Infrastructure\Service\RouteCollector;
+use Infrastructure\Service\PluginCollector;
+use Infrastructure\Service\TwigRenderer;
 
 return [
     \Psr\Log\LoggerInterface::class => function (ContainerInterface $c) {

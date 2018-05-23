@@ -6,8 +6,7 @@ namespace Infrastructure\App;
 use DI\Bridge\Slim\App;
 use DI\ContainerBuilder;
 use Infrastructure\Controller\FrontendController;
-use Infrastructure\Plugin\Plugin;
-use PhpParser\Node\Expr\AssignOp\Plus;
+use Infrastructure\Service\RouteCollector;
 
 class Sagui extends App
 {
