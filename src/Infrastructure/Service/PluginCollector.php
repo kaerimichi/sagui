@@ -35,8 +35,17 @@ class PluginCollector implements \IteratorAggregate
             $instance->setTemplatePath($instance->getPath().'/themes');
             $instance->setConfigPath($instance->getPath().'/config');
 
-            $this->plugins[$plugin] = $instance;
+            $this->plugins[$instance->getName()] = $instance;
         }
+    }
+
+    /**
+     * @param string $name
+     * @return PluginInterface|null
+     */
+    public function find(string $name): ?PluginInterface
+    {
+        return $this->plugins[$name] ?? null;
     }
 
     public function getIterator()

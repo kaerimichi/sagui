@@ -48,27 +48,28 @@ class AssetExtension extends \Twig_Extension
             return $this->uri->getBaseUrl().'/'.$path;
         }
 
-        /** @var PluginInterface $plugin */
-        foreach ($this->pluginCollector as $plugin) {
-            if (strpos($path, $plugin->getName()) !== false) {
-                $fileParts = explode('/', $path);
-                $fullPath = str_replace('@'.$plugin->getName(), dirname($plugin->getTemplatePath()), $path);
+        [$name] = explode('/', $path);
+        $plugin = $this->pluginCollector->find(str_replace('@', '', $name));
 
-                $publicPath = str_replace('@'.$plugin->getName(), '', $path);
-                $publicPath = '/application/public/assets/plugins/'.$plugin->getName().$publicPath;
-
-                if (!is_dir(\dirname($publicPath))) {
-                    mkdir(\dirname($publicPath), 755, true);
-                }
-
-                copy($fullPath, $publicPath);
-                return str_replace(
-                    '@'.$plugin->getName(),
-                    $this->uri->getBaseUrl().'/assets/plugins/'.$plugin->getName(),
-                    $path
-                );
-            }
+        if (!$plugin) {
+            throw new \DomainException();
         }
+
+        $fullPath = str_replace('@'.$plugin->getName(), \dirname($plugin->getTemplatePath()), $path);
+
+        $publicPath = str_replace('@'.$plugin->getName(), '', $path);
+        $publicPath = '/application/public/assets/plugins/'.$plugin->getName().$publicPath;
+
+        if (!is_dir(\dirname($publicPath))) {
+            mkdir(\dirname($publicPath), 755, true);
+        }
+        copy($fullPath, $publicPath);
+
+        return str_replace(
+            '@'.$plugin->getName(),
+            $this->uri->getBaseUrl().'/assets/plugins/'.$plugin->getName(),
+            $path
+        );
     }
 
     /**
