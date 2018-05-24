@@ -4,9 +4,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\ContainerInterface;
 use Infrastructure\Service\RouteCollector;
 use Infrastructure\Service\PluginCollector;
-use Infrastructure\Service\TwigRenderer;
+use Infrastructure\Service\Renderer\TwigRenderer;
 
 return [
+    'base_path' => \dirname(__DIR__, 3),
+    'app_path' => \dirname(__DIR__, 2),
     \Psr\Log\LoggerInterface::class => function (ContainerInterface $c) {
         $filename = getenv('APP_ENV') === 'dev' ? 'dev.log' : 'prod.log';
 
@@ -52,7 +54,7 @@ return [
         $routeCollector = new RouteCollector();
 
         $routeCollector->addRoutesDefinition(
-            \dirname(__DIR__, 2).'/App/config/routes.php',
+            $c->get('app_path').'/App/config/routes.php',
             'default'
         );
 
@@ -69,11 +71,11 @@ return [
     },
     PluginCollector::class => function (ContainerInterface $c) {
         $pluginCollector = new PluginCollector();
-        $pluginCollector->load(\dirname(__DIR__, 2).'/App/config/plugins.php');
+        $pluginCollector->load($c->get('app_path').'/App/config/plugins.php');
         return $pluginCollector;
     },
     TwigRenderer::class => function(ContainerInterface $c) {
-        $templates = [$c->get('theme') => \dirname(__DIR__, 3).'/themes/'.$c->get('theme')];
+        $templates = [$c->get('theme') => $c->get('base_path').'/themes/'.$c->get('theme')];
 
         $pluginCollector = $c->get(PluginCollector::class);
         /** @var \Infrastructure\Plugin\Plugin $plugin */
@@ -81,6 +83,16 @@ return [
             $templates[$plugin->getName()] = $plugin->getTemplatePath();
         }
 
-        return new TwigRenderer($templates, ['cache' => \dirname(__DIR__, 3).'/var/cache']);
+        $assets = new \Stolz\Assets\Manager([
+            'pipeline' => getenv('APP_ENV') !== 'dev',
+            'public_dir' => $c->get('base_path').'/public',
+            'js_dir' => 'assets/js'
+        ]);
+
+        return new TwigRenderer(
+            $templates,
+            ['cache' => $c->get('base_path').'/var/cache', 'debug' => true],
+            new \Infrastructure\Service\Renderer\AssetExtension($c->get('request')->getUri(), $pluginCollector, $assets)
+        );
     },
 ];
