@@ -48,6 +48,10 @@ class AssetExtension extends \Twig_Extension
             return $this->uri->getBaseUrl().'/'.$path;
         }
 
+        if (strpos($path, 'http') || strpos($path, '//')) {
+            return $path;
+        }
+
         [$name] = explode('/', $path);
         $plugin = $this->pluginCollector->find(str_replace('@', '', $name));
 
