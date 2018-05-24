@@ -11,29 +11,13 @@ use Infrastructure\Service\RouteCollector;
 class Sagui extends App
 {
     /**
-     * @var string
-     */
-    private $definitionFile;
-
-    /**
      * @var RouteCollector
      */
     private $routeCollector;
 
-    /**
-     * Sagui constructor.
-     */
-    public function __construct()
-    {
-        $this->definitionFile = \dirname(__DIR__, 3).'/config/default.'.getenv('APP_ENV').'.php';
-
-        parent::__construct();
-
-        $this->routeCollector = $this->getContainer()->get(RouteCollector::class);
-    }
-
     public function bootstrap(): void
     {
+        $this->routeCollector = $this->getContainer()->get(RouteCollector::class);
         $this->defineRoutes();
     }
 
@@ -42,12 +26,17 @@ class Sagui extends App
      */
     protected function configureContainer(ContainerBuilder $builder): void
     {
+        $definitions = array_merge(
+            require \dirname(__DIR__, 3).'/config/default.'.getenv('APP_ENV').'.php',
+            require 'default_config.php'
+        );
+
         if (getenv('APP_ENV') === 'prod') {
             $builder->enableDefinitionCache();
             $builder->enableCompilation(\dirname(__DIR__, 3).'/var/cache');
         }
 
-        $builder->addDefinitions($this->definitionFile);
+        $builder->addDefinitions($definitions);
         $builder->addDefinitions(__DIR__ . '/base_dependencies.php');
 
         parent::configureContainer($builder);
