@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        <!--[if lte IE 8]>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
+        <![endif]-->
+        <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+        <!--<![endif]-->
+
+        {#<link rel="stylesheet" href="{{ asset('css/pure-min.css') }}">#}
+    {% endblock %}
+    {#<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />#}
+</head>
+<body>
+{% block body %}{% endblock %}
+{% block javascripts %}
+    {{ addJs('@admin/themes/assets/js/vue.js') }}
+    {{ addJs('@admin/themes/assets/js/vuex.js') }}
+    {{ showJs()|raw }}
+{% endblock %}
+</body>
+</html>
