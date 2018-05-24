@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Infrastructure\Controller;
 
-use Infrastructure\Service\TwigRenderer;
+use Infrastructure\Service\Renderer\TwigRenderer;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 
