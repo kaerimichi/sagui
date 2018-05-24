@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8" />
-    <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
-        <!--[if lte IE 8]>
-        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
-        <![endif]-->
-        <!--[if gt IE 8]><!-->
-        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
-        <!--<![endif]-->
-
-        {#<link rel="stylesheet" href="{{ asset('css/pure-min.css') }}">#}
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
     {% endblock %}
-    {#<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />#}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 <body>
-{% block body %}{% endblock %}
+<div id="app">
+    {% block body %}{% endblock %}
+</div>
+
 {% block javascripts %}
     {{ addJs('@admin/themes/assets/js/vue.js') }}
     {{ addJs('@admin/themes/assets/js/vuex.js') }}
+    {{ addJs('@admin/themes/assets/js/vue-router.js') }}
+    {{ addJs('@admin/themes/assets/js/vuetify.js') }}
+    {{ addJs('@admin/themes/assets/js/app.js') }}
     {{ showJs()|raw }}
 {% endblock %}
+
 </body>
 </html>
