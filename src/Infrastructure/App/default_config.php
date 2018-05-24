@@ -10,5 +10,5 @@ return [
     'settings.determineRouteBeforeAppMiddleware' => true,
     'settings.logger.name' => 'App',
     'settings.logger.level' => Logger::DEBUG,
-    'settings.logger.path' => dirname(__DIR__).'/var/logs'
+    'settings.logger.path' => dirname(__DIR__, 3).'/var/logs'
 ];
