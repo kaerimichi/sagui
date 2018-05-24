@@ -49,7 +49,9 @@ Temporary Items
 
 # Project
 vendor/
-composer.lock
 var/logs
 var/cache/
+public/assets/js/*
+public/assets/css/*
+public/assets/plugins
 
