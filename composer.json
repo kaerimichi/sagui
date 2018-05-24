@@ -6,7 +6,8 @@
         "monolog/monolog": "^1.23",
         "robmorgan/phinx": "^0.9.2",
         "symfony/console": "^4.0",
-        "twig/twig": "^2.0"
+        "twig/twig": "^2.0",
+        "stolz/assets": "^0.1.11"
     },
     "autoload": {
         "psr-4": {
