@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Infrastructure\Service;
 
 use Infrastructure\Plugin\Plugin;
+use Infrastructure\Plugin\PluginInterface;
 
 class PluginCollector implements \IteratorAggregate
 {
@@ -27,11 +28,11 @@ class PluginCollector implements \IteratorAggregate
         foreach ($plugins as $plugin) {
             $instance = new $plugin;
 
-            if (!$instance instanceof Plugin) {
+            if (!$instance instanceof PluginInterface) {
                 throw new \RuntimeException('Your plugin must implement '.Plugin::class.'.');
             }
 
-            $instance->setTemplatePath($instance->getPath().'/templates');
+            $instance->setTemplatePath($instance->getPath().'/themes');
             $instance->setConfigPath($instance->getPath().'/config');
 
             $this->plugins[$plugin] = $instance;
