@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Infrastructure\Controller;
 
+use Atlas\Orm\Atlas;
 use Infrastructure\Service\Renderer\TwigRenderer;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
@@ -10,12 +11,24 @@ use Slim\Http\Response;
 class AbstractController
 {
     /**
+     * @var Atlas
+     */
+    protected $atlas;
+
+    /**
+     * @var TwigRenderer
+     */
+    protected $renderer;
+
+    /**
      * AbstractController constructor.
      * @param TwigRenderer $renderer
+     * @param Atlas $atlas
      */
-    public function __construct(TwigRenderer $renderer)
+    public function __construct(TwigRenderer $renderer, Atlas $atlas)
     {
         $this->renderer = $renderer;
+        $this->atlas = $atlas;
     }
 
     /**
