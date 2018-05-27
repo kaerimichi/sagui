@@ -7,7 +7,12 @@
         "robmorgan/phinx": "^0.9.2",
         "symfony/console": "^4.0",
         "twig/twig": "^2.0",
-        "stolz/assets": "^0.1.11"
+        "stolz/assets": "^0.1.11",
+        "aura/auth": "^2.0",
+        "atlas/query": "~1.0",
+        "atlas/orm": "^2.3",
+        "atlas/cli": "^1.1",
+        "respect/validation": "^1.1"
     },
     "autoload": {
         "psr-4": {

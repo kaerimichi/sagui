@@ -4,8 +4,520 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "00ee00913f899e72a82bf84f6c62235e",
+    "content-hash": "fe2525b3f991d66f1a65b804b98d8861",
     "packages": [
+        {
+            "name": "atlas/cli",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/atlasphp/Atlas.Cli.git",
+                "reference": "5e3427c385ed9fb1d370162052f588eb6c5cdf62"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/atlasphp/Atlas.Cli/zipball/5e3427c385ed9fb1d370162052f588eb6c5cdf62",
+                "reference": "5e3427c385ed9fb1d370162052f588eb6c5cdf62",
+                "shasum": ""
+            },
+            "require": {
+                "aura/cli": "~2.0",
+                "aura/sqlschema": "~2.0",
+                "php": ">=5.6.0",
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "pds/skeleton": "~1.0",
+                "phpunit/phpunit": "~5.3.0"
+            },
+            "bin": [
+                "bin/atlas-skeleton.php"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Atlas\\Cli\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Atlas.Cli Contributors",
+                    "homepage": "https://github.com/atlasphp/Atlas.Cli/contributors"
+                }
+            ],
+            "description": "Command-line interface for Atlas.",
+            "homepage": "http://github.com/atlasphp/Atlas.Cli",
+            "keywords": [
+                "data",
+                "mapper",
+                "mapping",
+                "orm",
+                "sql"
+            ],
+            "time": "2018-03-19T12:39:17+00:00"
+        },
+        {
+            "name": "atlas/orm",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/atlasphp/Atlas.Orm.git",
+                "reference": "c3462e660f81ef366cf82b60c9a18f4cba6bc035"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/atlasphp/Atlas.Orm/zipball/c3462e660f81ef366cf82b60c9a18f4cba6bc035",
+                "reference": "c3462e660f81ef366cf82b60c9a18f4cba6bc035",
+                "shasum": ""
+            },
+            "require": {
+                "aura/sql": "~2.0",
+                "aura/sqlquery": "~2.0",
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "atlas/cli": "~1.0",
+                "pds/skeleton": "~1.0",
+                "phpunit/phpunit": "~6.0",
+                "producer/githooks": "0.x@dev"
+            },
+            "suggest": {
+                "atlas/cli": "A command-line tool to build skeleton classes."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Atlas\\Orm\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Atlas Contributors",
+                    "homepage": "https://github.com/atlasphp/Atlas.Orm/contributors"
+                }
+            ],
+            "description": "A data mapper ORM for your persistence model (not your domain model).",
+            "homepage": "http://github.com/atlasphp/Atlas.Orm",
+            "keywords": [
+                "data",
+                "mapper",
+                "mapping",
+                "orm",
+                "sql"
+            ],
+            "time": "2018-05-06T21:01:22+00:00"
+        },
+        {
+            "name": "atlas/pdo",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/atlasphp/Atlas.Pdo.git",
+                "reference": "abc27ed9a3f6eae055a1737c03b3fbb86b9763ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/atlasphp/Atlas.Pdo/zipball/abc27ed9a3f6eae055a1737c03b3fbb86b9763ef",
+                "reference": "abc27ed9a3f6eae055a1737c03b3fbb86b9763ef",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "pds/skeleton": "~1.0",
+                "phpunit/phpunit": "~7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Atlas\\Pdo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Atlas.Pdo Contributors",
+                    "homepage": "https://github.com/atlasphp/Atlas.Pdo/contributors"
+                }
+            ],
+            "description": "Provides a PDO instance decorator with convenience methods, and a connection manager.",
+            "homepage": "https://github.com/atlasphp/Atlas.Pdo",
+            "keywords": [
+                "Connection",
+                "database",
+                "pdo",
+                "sql"
+            ],
+            "time": "2018-05-07T12:42:19+00:00"
+        },
+        {
+            "name": "atlas/query",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/atlasphp/Atlas.Query.git",
+                "reference": "5d2cb454fedc6dc25ac44b86f5e2e0358193bbe7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/atlasphp/Atlas.Query/zipball/5d2cb454fedc6dc25ac44b86f5e2e0358193bbe7",
+                "reference": "5d2cb454fedc6dc25ac44b86f5e2e0358193bbe7",
+                "shasum": ""
+            },
+            "require": {
+                "atlas/pdo": "~1.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "pds/skeleton": "~1.0",
+                "phpunit/phpunit": "~7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Atlas\\Query\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Atlas.Query Contributors",
+                    "homepage": "https://github.com/atlasphp/Atlas.Query/contributors"
+                }
+            ],
+            "description": "Object-oriented query builders for MySQL, Postgres, SQLite, and SQLServer.",
+            "homepage": "https://github.com/atlasphp/Atlas.Query",
+            "keywords": [
+                "database",
+                "db",
+                "delete",
+                "dml",
+                "insert",
+                "mysql",
+                "pdo",
+                "pgsql",
+                "postgres",
+                "postgresql",
+                "query",
+                "select",
+                "sql",
+                "sql server",
+                "sqlite",
+                "sqlserver",
+                "update"
+            ],
+            "time": "2018-05-23T20:13:07+00:00"
+        },
+        {
+            "name": "aura/auth",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Auth.git",
+                "reference": "85a17b1d6cb48b00255ece9f9b0d99fc1dbc503e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Auth/zipball/85a17b1d6cb48b00255ece9f9b0d99fc1dbc503e",
+                "reference": "85a17b1d6cb48b00255ece9f9b0d99fc1dbc503e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "aura/di": "~2.0",
+                "phpunit/phpunit": "~5.7 || ~4.8"
+            },
+            "suggest": {
+                "ext/imap": "For IMAP/POP/NNTP integration.",
+                "ext/ldap": "For LDAP integration.",
+                "ircmaxell/password-compat": "Provides password_verify() for PHP versions earlier than 5.5"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library",
+                    "config": {
+                        "common": "Aura\\Auth\\_Config\\Common"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Auth\\": "src/",
+                    "Aura\\Auth\\_Config\\": "config/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Auth Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Auth/contributors"
+                }
+            ],
+            "description": "Provides a unified interface to authenticate a user with local or remote authentication systems.",
+            "homepage": "https://github.com/auraphp/Aura.Auth",
+            "keywords": [
+                "Authentication",
+                "auth",
+                "authenticate"
+            ],
+            "time": "2017-03-18T07:37:15+00:00"
+        },
+        {
+            "name": "aura/cli",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Cli.git",
+                "reference": "d69cfa6d81e94e13d831e38ad9e3d53aa0f08a8b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Cli/zipball/d69cfa6d81e94e13d831e38ad9e3d53aa0f08a8b",
+                "reference": "d69cfa6d81e94e13d831e38ad9e3d53aa0f08a8b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "aura/di": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library",
+                    "config": {
+                        "common": "Aura\\Cli\\_Config\\Common"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Cli\\": "src/",
+                    "Aura\\Cli\\_Config\\": "config/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Cli Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Cli/contributors"
+                }
+            ],
+            "description": "Provides the equivalent of request (Context) and response (Stdio) classes for a command line environment, including Getopt support.",
+            "homepage": "https://github.com/auraphp/Aura.Cli",
+            "keywords": [
+                "cli",
+                "command",
+                "command line",
+                "getopt",
+                "options",
+                "stdio"
+            ],
+            "time": "2017-02-09T17:14:27+00:00"
+        },
+        {
+            "name": "aura/sql",
+            "version": "2.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Sql.git",
+                "reference": "2fe8840c25891511a9d988b5504d03ad7d234364"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Sql/zipball/2fe8840c25891511a9d988b5504d03ad7d234364",
+                "reference": "2fe8840c25891511a9d988b5504d03ad7d234364",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~5.7 || ~4.8"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Sql\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Sql Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Sql/contributors"
+                }
+            ],
+            "description": "A PDO extension that provides lazy connections, array quoting, identifier quoting, query profiling, value binding, and convenience methods for common fetch styles. Because it extends PDO, existing code that uses PDO can use this without any changes to the existing code.",
+            "homepage": "https://github.com/auraphp/Aura.Sql",
+            "keywords": [
+                "mysql",
+                "pdo",
+                "pgsql",
+                "postgres",
+                "postgresql",
+                "sql server",
+                "sqlite",
+                "sqlserver",
+                "sqlsrv"
+            ],
+            "time": "2018-03-04T06:43:25+00:00"
+        },
+        {
+            "name": "aura/sqlquery",
+            "version": "2.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.SqlQuery.git",
+                "reference": "dd81b57aeb43628180a9c70a4df58d872024d7f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.SqlQuery/zipball/dd81b57aeb43628180a9c70a4df58d872024d7f2",
+                "reference": "dd81b57aeb43628180a9c70a4df58d872024d7f2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "suggest": {
+                "aura/sql": "Provides an extension to the native PDO along with a profiler and connection locator. Use version 2.*."
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\SqlQuery\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.SqlQuery Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.SqlQuery/contributors"
+                }
+            ],
+            "description": "Object-oriented query builders for MySQL, Postgres, SQLite, and SQLServer; can be used with any database connection library.",
+            "homepage": "https://github.com/auraphp/Aura.SqlQuery",
+            "keywords": [
+                "database",
+                "db",
+                "delete",
+                "dml",
+                "insert",
+                "mysql",
+                "pdo",
+                "pgsql",
+                "postgres",
+                "postgresql",
+                "query",
+                "select",
+                "sql",
+                "sql server",
+                "sqlite",
+                "sqlserver",
+                "update"
+            ],
+            "time": "2016-10-03T20:34:56+00:00"
+        },
+        {
+            "name": "aura/sqlschema",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.SqlSchema.git",
+                "reference": "0670487532731e51fcd7b8088e9920b4671453b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.SqlSchema/zipball/0670487532731e51fcd7b8088e9920b4671453b2",
+                "reference": "0670487532731e51fcd7b8088e9920b4671453b2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\SqlSchema\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.SqlSchema Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.SqlSchema/contributors"
+                }
+            ],
+            "description": "Provides facilities to read table names and table columns from a database using PDO.",
+            "homepage": "https://github.com/auraphp/Aura.SqlSchema",
+            "keywords": [
+                "database",
+                "db",
+                "ddl",
+                "mysql",
+                "pdo",
+                "pgsql",
+                "postgres",
+                "postgresql",
+                "schema",
+                "sql",
+                "sql server",
+                "sqlite",
+                "sqlserver",
+                "sqlsrv"
+            ],
+            "time": "2016-04-29T13:48:25+00:00"
+        },
         {
             "name": "container-interop/container-interop",
             "version": "1.2.0",
@@ -810,6 +1322,69 @@
             "time": "2016-10-10T12:19:37+00:00"
         },
         {
+            "name": "respect/validation",
+            "version": "1.1.16",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Respect/Validation.git",
+                "reference": "020ea1ebb5dc626bb7f1958ff49f69172ff589cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Respect/Validation/zipball/020ea1ebb5dc626bb7f1958ff49f69172ff589cc",
+                "reference": "020ea1ebb5dc626bb7f1958ff49f69172ff589cc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4",
+                "symfony/polyfill-mbstring": "^1.2"
+            },
+            "require-dev": {
+                "egulias/email-validator": "~1.2",
+                "mikey179/vfsstream": "^1.5",
+                "phpunit/phpunit": "~4.0",
+                "symfony/validator": "~2.6.9",
+                "zendframework/zend-validator": "~2.3"
+            },
+            "suggest": {
+                "egulias/email-validator": "Strict (RFC compliant) email validation",
+                "ext-bcmath": "Arbitrary Precision Mathematics",
+                "ext-mbstring": "Multibyte String Functions",
+                "fabpot/php-cs-fixer": "Fix PSR2 and other coding style issues",
+                "symfony/validator": "Use Symfony validator through Respect\\Validation",
+                "zendframework/zend-validator": "Use Zend Framework validator through Respect\\Validation"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Respect\\Validation\\": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD Style"
+            ],
+            "authors": [
+                {
+                    "name": "Respect/Validation Contributors",
+                    "homepage": "https://github.com/Respect/Validation/graphs/contributors"
+                }
+            ],
+            "description": "The most awesome validation engine ever created for PHP",
+            "homepage": "http://respect.github.io/Validation/",
+            "keywords": [
+                "respect",
+                "validation",
+                "validator"
+            ],
+            "time": "2018-05-19T14:26:44+00:00"
+        },
+        {
             "name": "robmorgan/phinx",
             "version": "0.9.2",
             "source": {
@@ -1018,7 +1593,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "v4.0.10",
+            "version": "v4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
@@ -1081,7 +1656,7 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.0.10",
+            "version": "v4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
@@ -1149,7 +1724,7 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v4.0.10",
+            "version": "v4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -1421,7 +1996,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.0.10",
+            "version": "v4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
