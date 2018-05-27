@@ -4,7 +4,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\ContainerInterface;
 use Infrastructure\Service\RouteCollector;
 use Infrastructure\Service\PluginCollector;
+use Infrastructure\Service\DatasourceCollector;
 use Infrastructure\Service\Renderer\TwigRenderer;
+use Aura\Auth\Adapter\PdoAdapter;
+use Aura\Auth\AuthFactory;
 
 return [
     'base_path' => \dirname(__DIR__, 3),
@@ -24,7 +27,7 @@ return [
         return $c->get(\Psr\Log\LoggerInterface::class);
     },
     'errorHandler' => function (ContainerInterface $c) {
-        return function (ServerRequestInterface $request, $response, Exception $e) use ($c) {
+        return function (ServerRequestInterface $request, \Psr\Http\Message\ResponseInterface $response, Exception $e) use ($c) {
             $trace = $e->getTrace();
 
             $data = [
@@ -37,6 +40,10 @@ return [
             $body = $request->getParsedBody();
             if (!empty($body)) {
                 $data['payload'] = $body;
+            }
+
+            if ($e instanceof \Infrastructure\Exception\ApiException) {
+                return (new \Slim\Http\Response())->withJson($e->getDetails(), $e->getStatus());
             }
 
             $message = $e->getMessage();
@@ -74,6 +81,11 @@ return [
         $pluginCollector->load($c->get('app_path').'/App/config/plugins.php');
         return $pluginCollector;
     },
+    DatasourceCollector::class => function (ContainerInterface $c) {
+        $dsCollector = new DatasourceCollector();
+        $dsCollector->collect($c->get(PluginCollector::class));
+        return $dsCollector;
+    },
     TwigRenderer::class => function(ContainerInterface $c) {
         $templates = [$c->get('theme') => $c->get('base_path').'/themes/'.$c->get('theme')];
 
@@ -95,4 +107,39 @@ return [
             new \Infrastructure\Service\Renderer\AssetExtension($c->get('request')->getUri(), $pluginCollector, $assets)
         );
     },
+    PDO::class => function (ContainerInterface $c) {
+        return new PDO('sqlite:'.$c->get('base_path').'/var/sqlite');
+    },
+    \Atlas\Orm\AtlasContainer::class => function (ContainerInterface $c) {
+        $atlasContainer = new \Atlas\Orm\AtlasContainer($c->get(PDO::class));
+
+        $atlasContainer->setMappers($c->get(DatasourceCollector::class)->getDataSources());
+
+        return $atlasContainer;
+    },
+    \Atlas\Orm\Atlas::class => function (ContainerInterface $c) {
+        return $c->get(\Atlas\Orm\AtlasContainer::class)->getAtlas();
+    },
+    AuthFactory::class => function () {
+        return new AuthFactory($_COOKIE);
+    },
+    PdoAdapter::class => function (ContainerInterface $c) {
+        $hash = new \Aura\Auth\Verifier\PasswordVerifier(PASSWORD_ARGON2I);
+        $cols = ['email', 'password', 'name',];
+        $from = 'users';
+        $where = '';
+        return $c->get(AuthFactory::class)->newPdoAdapter($c->get(PDO::class), $hash, $cols, $from, $where);
+    },
+    \Aura\Auth\Service\LoginService::class => function (ContainerInterface $c) {
+        return $c->get(AuthFactory::class)->newLoginService($c->get(PdoAdapter::class));
+    },
+    \Aura\Auth\Service\LogoutService::class => function (ContainerInterface $c) {
+        return $c->get(AuthFactory::class)->newLogoutService($c->get(PdoAdapter::class));
+    },
+    \Aura\Auth\Service\ResumeService::class => function (ContainerInterface $c) {
+        return $c->get(AuthFactory::class)->newResumeService($c->get(PdoAdapter::class));
+    },
+    \Aura\Auth\Auth::class => function (ContainerInterface $c) {
+        return $c->get(AuthFactory::class)->newInstance();
+    }
 ];
