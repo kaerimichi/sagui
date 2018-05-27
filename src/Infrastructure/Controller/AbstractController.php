@@ -10,11 +10,6 @@ use Slim\Http\Response;
 class AbstractController
 {
     /**
-     * @var TwigRenderer
-     */
-    private $renderer;
-
-    /**
      * AbstractController constructor.
      * @param TwigRenderer $renderer
      */
@@ -27,6 +22,7 @@ class AbstractController
      * @param string $template
      * @param array $data
      * @return ResponseInterface
+     * @throws \Throwable
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -35,6 +31,18 @@ class AbstractController
     {
         $response = new Response();
         $response->getBody()->write($this->renderer->render($template, $data));
+        return $response;
+    }
+
+    /**
+     * @param array|null $data
+     * @param int $status
+     * @return ResponseInterface
+     */
+    protected function renderJson(?array $data, int $status = 200): ResponseInterface
+    {
+        $response = new Response();
+        $response = $response->withJson($data, $status);
         return $response;
     }
 }
