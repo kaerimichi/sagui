@@ -16,4 +16,38 @@
         </v-container>
     </v-content>
 </v-app>
+
+<script type="text/x-template" id="login-template">
+<v-layout row wrap justify-center>
+  <v-flex xs12 sm6>
+        <v-card class="elevation-10">
+              <v-toolbar color="teal">
+                    <v-toolbar-title class="white--text">Login</v-toolbar-title>
+                  </v-toolbar>
+              <v-container fluid>
+                    <v-layout row wrap>
+                          <v-flex xs12>
+                                <v-text-field
+                                  v-model="email"
+                                  :rules="[rules.required, rules.email]"
+                                  label="E-mail"
+                                ></v-text-field>
+                              </v-flex>
+                          <v-flex xs12>
+                                <v-text-field
+                                  v-model="password"
+                                  :append-icon="elPwd ? 'visibility' : 'visibility_off'"
+                                  :append-icon-cb="() => (elPwd = !elPwd)"
+                                  :type="elPwd ? 'password' : 'text'"
+                                  name="input-10-1"
+                                  :rules="[rules.required]"
+                                  label="Enter your password"
+                                ></v-text-field>
+                              </v-flex>
+                        </v-layout>
+                  </v-container>
+            </v-card>
+      </v-flex>
+</v-layout>
+</script>
 {% endblock %}

@@ -14,11 +14,14 @@
 </div>
 
 {% block javascripts %}
-    {{ addJs('@admin/themes/assets/js/vue.js') }}
-    {{ addJs('@admin/themes/assets/js/vuex.js') }}
-    {{ addJs('@admin/themes/assets/js/vue-router.js') }}
-    {{ addJs('@admin/themes/assets/js/vuetify.js') }}
-    {{ addJs('@admin/themes/assets/js/app.js') }}
+    {{ addJs('@admin/themes/assets/js/vendor/vue.js') }}
+    {{ addJs('@admin/themes/assets/js/vendor/vuex.js') }}
+    {{ addJs('@admin/themes/assets/js/vendor/vue-router.js') }}
+    {{ addJs('@admin/themes/assets/js/vendor/vuetify.js') }}
+    {{ addJs('@admin/themes/assets/js/vendor/axios.min.js') }}
+    {{ addJs('@admin/themes/assets/js/app/login.js') }}
+    {{ addJs('@admin/themes/assets/js/app/register.js') }}
+    {{ addJs('@admin/themes/assets/js/app/app.js') }}
     {{ showJs()|raw }}
 {% endblock %}
 
