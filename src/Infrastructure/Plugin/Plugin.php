@@ -35,24 +35,42 @@ abstract class Plugin implements PluginInterface
 
     /**
      * @param string $templatePath
+     * @throws \ReflectionException
      */
     public function setTemplatePath(string $templatePath)
     {
-        $this->templatePath = $templatePath;
+        $this->templatePath = $this->getPath().$templatePath;
     }
 
     /**
      * @param string $configPath
+     * @throws \ReflectionException
      */
     public function setConfigPath(string $configPath)
     {
-        $this->configPath = $configPath;
+        $this->configPath = $this->getPath().$configPath;
     }
 
     /**
      * @return string
      */
-    public function getTemplatePath()
+    public function getDefaultTemplatePath():string
+    {
+        return '/themes';
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultConfigPath(): string
+    {
+        return '/config';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplatePath(): string
     {
         return $this->templatePath;
     }
@@ -60,7 +78,7 @@ abstract class Plugin implements PluginInterface
     /**
      * @return string
      */
-    public function getConfigPath()
+    public function getConfigPath(): string
     {
         return $this->configPath;
     }

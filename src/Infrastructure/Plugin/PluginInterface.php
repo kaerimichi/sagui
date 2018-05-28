@@ -28,10 +28,20 @@ interface PluginInterface
     /**
      * @return string
      */
-    public function getTemplatePath();
+    public function getDefaultTemplatePath():string;
 
     /**
      * @return string
      */
-    public function getConfigPath();
+    public function getDefaultConfigPath(): string;
+
+    /**
+     * @return string
+     */
+    public function getTemplatePath(): string;
+
+    /**
+     * @return string
+     */
+    public function getConfigPath(): string;
 }
