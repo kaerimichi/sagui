@@ -32,9 +32,6 @@ class PluginCollector implements \IteratorAggregate
                 throw new \RuntimeException('Your plugin must implement '.Plugin::class.'.');
             }
 
-            $instance->setTemplatePath($instance->getDefaultTemplatePath());
-            $instance->setConfigPath($instance->getDefaultConfigPath());
-
             $this->plugins[$instance->getName()] = $instance;
         }
     }

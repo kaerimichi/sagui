@@ -16,26 +16,6 @@ interface PluginInterface
     public function getPath(): string;
 
     /**
-     * @param string $templatePath
-     */
-    public function setTemplatePath(string $templatePath);
-
-    /**
-     * @param string $configPath
-     */
-    public function setConfigPath(string $configPath);
-
-    /**
-     * @return string
-     */
-    public function getDefaultTemplatePath():string;
-
-    /**
-     * @return string
-     */
-    public function getDefaultConfigPath(): string;
-
-    /**
      * @return string
      */
     public function getTemplatePath(): string;
@@ -44,4 +24,19 @@ interface PluginInterface
      * @return string
      */
     public function getConfigPath(): string;
+
+    /**
+     * @return string
+     */
+    public function getDatasources(): string;
+
+    /**
+     * @return string
+     */
+    public function getDependencies(): string;
+
+    /**
+     * @return string
+     */
+    public function getRoutes(): string;
 }

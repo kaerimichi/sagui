@@ -14,22 +14,21 @@ class DatasourceCollector
 
     /**
      * @param PluginCollector $pluginCollector
-     * @return array
      */
     public function collect(PluginCollector $pluginCollector): void
     {
         $this->dataSources = [[]];
-        if (is_file(\dirname(__DIR__, 2).'/config/App/datasources.php')) {
-            $this->dataSources = [include \dirname(__DIR__, 2).'/config/App/datasources.php'];
+        if (is_file(\dirname(__DIR__, 2).'/config/datasources.php')) {
+            $this->dataSources = [include \dirname(__DIR__, 2).'/config/datasources.php'];
         }
 
         /** @var PluginInterface $plugin */
         foreach ($pluginCollector->getIterator() as $plugin) {
-            if (!is_file($plugin->getConfigPath().'/datasources.php')) {
+            if (!is_file($plugin->getDatasources())) {
                 continue;
             }
 
-            $pluginDs = include $plugin->getConfigPath().'/datasources.php';
+            $pluginDs = include $plugin->getDatasources();
             $this->dataSources[] = $pluginDs;
         }
 
