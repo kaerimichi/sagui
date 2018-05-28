@@ -3,17 +3,37 @@ declare(strict_types=1);
 
 namespace Infrastructure\App;
 
-use DI\Bridge\Slim\App;
 use DI\ContainerBuilder;
 use Infrastructure\Controller\FrontendController;
+use Infrastructure\Plugin\Plugin;
+use Infrastructure\Service\PluginCollector;
 use Infrastructure\Service\RouteCollector;
 
-class Sagui extends App
+class Sagui extends \Slim\App
 {
     /**
      * @var RouteCollector
      */
     private $routeCollector;
+
+    /**
+     * Sagui constructor.
+     * @throws \Exception
+     */
+    public function __construct()
+    {
+        $containerBuilder = new ContainerBuilder;
+        if (getenv('APP_ENV') === 'prod') {
+            $containerBuilder->enableDefinitionCache();
+            $containerBuilder->enableCompilation(\dirname(__DIR__, 3).'/var/cache');
+        }
+
+        $containerBuilder = $this->defineDefaultDependencies($containerBuilder);
+        $containerBuilder = $this->definePluginsDependencies($containerBuilder);
+        $container = $containerBuilder->build();
+
+        parent::__construct($container);
+    }
 
     public function bootstrap(): void
     {
@@ -23,23 +43,38 @@ class Sagui extends App
 
     /**
      * @param ContainerBuilder $builder
+     * @return ContainerBuilder
+     * @throws \ReflectionException
      */
-    protected function configureContainer(ContainerBuilder $builder): void
+    protected function definePluginsDependencies(ContainerBuilder $builder): ContainerBuilder
+    {
+        $pluginCollector = new PluginCollector();
+        $pluginCollector->load(\dirname(__DIR__, 2).'/App/config/plugins.php');
+
+        /** @var Plugin $plugin */
+        foreach ($pluginCollector as $plugin) {
+            $builder->addDefinitions($plugin->getConfigPath().'/dependencies.php');
+        }
+
+        return $builder;
+    }
+
+    /**
+     * @param ContainerBuilder $builder
+     * @return ContainerBuilder
+     */
+    protected function defineDefaultDependencies(ContainerBuilder $builder): ContainerBuilder
     {
         $definitions = array_merge(
             require \dirname(__DIR__, 3).'/config/default.'.getenv('APP_ENV').'.php',
             require 'default_config.php'
         );
 
-        if (getenv('APP_ENV') === 'prod') {
-            $builder->enableDefinitionCache();
-            $builder->enableCompilation(\dirname(__DIR__, 3).'/var/cache');
-        }
-
+        $builder->addDefinitions(__DIR__ . '/slim_dependencies.php');
         $builder->addDefinitions($definitions);
         $builder->addDefinitions(__DIR__ . '/base_dependencies.php');
 
-        parent::configureContainer($builder);
+        return $builder;
     }
 
     protected function defineRoutes(): void

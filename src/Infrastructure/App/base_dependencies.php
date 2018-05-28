@@ -6,8 +6,6 @@ use Infrastructure\Service\RouteCollector;
 use Infrastructure\Service\PluginCollector;
 use Infrastructure\Service\DatasourceCollector;
 use Infrastructure\Service\Renderer\TwigRenderer;
-use Aura\Auth\Adapter\PdoAdapter;
-use Aura\Auth\AuthFactory;
 
 return [
     'base_path' => \dirname(__DIR__, 3),
@@ -120,26 +118,4 @@ return [
     \Atlas\Orm\Atlas::class => function (ContainerInterface $c) {
         return $c->get(\Atlas\Orm\AtlasContainer::class)->getAtlas();
     },
-    AuthFactory::class => function () {
-        return new AuthFactory($_COOKIE);
-    },
-    PdoAdapter::class => function (ContainerInterface $c) {
-        $hash = new \Aura\Auth\Verifier\PasswordVerifier(PASSWORD_ARGON2I);
-        $cols = ['email', 'password', 'name',];
-        $from = 'users';
-        $where = '';
-        return $c->get(AuthFactory::class)->newPdoAdapter($c->get(PDO::class), $hash, $cols, $from, $where);
-    },
-    \Aura\Auth\Service\LoginService::class => function (ContainerInterface $c) {
-        return $c->get(AuthFactory::class)->newLoginService($c->get(PdoAdapter::class));
-    },
-    \Aura\Auth\Service\LogoutService::class => function (ContainerInterface $c) {
-        return $c->get(AuthFactory::class)->newLogoutService($c->get(PdoAdapter::class));
-    },
-    \Aura\Auth\Service\ResumeService::class => function (ContainerInterface $c) {
-        return $c->get(AuthFactory::class)->newResumeService($c->get(PdoAdapter::class));
-    },
-    \Aura\Auth\Auth::class => function (ContainerInterface $c) {
-        return $c->get(AuthFactory::class)->newInstance();
-    }
 ];
