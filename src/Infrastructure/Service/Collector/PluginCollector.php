@@ -1,23 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Infrastructure\Service;
+namespace Infrastructure\Service\Collector;
 
 use Infrastructure\Plugin\Plugin;
 use Infrastructure\Plugin\PluginInterface;
 
-class PluginCollector implements \IteratorAggregate
+class PluginCollector extends Collector
 {
     /**
-     * @var array
-     */
-    private $plugins;
-
-    /**
      * @param string $definitionPath
-     * @throws \ReflectionException
      */
-    public function load(string $definitionPath): void
+    public function addDefinition(string $definitionPath): void
     {
         if (!is_file($definitionPath)) {
             return;
@@ -32,7 +26,7 @@ class PluginCollector implements \IteratorAggregate
                 throw new \RuntimeException('Your plugin must implement '.Plugin::class.'.');
             }
 
-            $this->plugins[$instance->getName()] = $instance;
+            $this->bag[$instance->getName()] = $instance;
         }
     }
 
@@ -42,15 +36,6 @@ class PluginCollector implements \IteratorAggregate
      */
     public function find(string $name): ?PluginInterface
     {
-        return $this->plugins[$name] ?? null;
-    }
-
-    public function getIterator()
-    {
-        return (function () {
-            foreach ($this->plugins as $key => $val) {
-                yield $key => $val;
-            }
-        })();
+        return $this->bag[$name] ?? null;
     }
 }

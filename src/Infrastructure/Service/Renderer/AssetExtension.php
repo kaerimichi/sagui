@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Infrastructure\Service\Renderer;
 
-use Infrastructure\Plugin\PluginInterface;
-use Infrastructure\Service\PluginCollector;
+use Infrastructure\Service\Collector\PluginCollector;
 use Stolz\Assets\Manager as AssetManager;
 use Slim\Http\Uri;
 
