@@ -33,22 +33,22 @@ abstract class Plugin implements PluginInterface
     ];
 
     /**
-     * @var string
+     * @var array
      */
     private $datasources;
 
     /**
-     * @var string
+     * @var array
      */
     private $dependencies;
 
     /**
-     * @var string
+     * @var array
      */
     private $routes;
 
     /**
-     * @var string
+     * @var array
      */
     private $middlewares;
 
@@ -100,52 +100,52 @@ abstract class Plugin implements PluginInterface
     }
 
     /**
-     * @return string
+     * @return array
      * @throws \ReflectionException
      */
-    public function getDatasources(): string
+    public function getDatasources(): array
     {
         if (!$this->datasources) {
-            $this->datasources = $this->getConfigPath().'/'.$this->config['datasources'];
+            $this->datasources = include_once $this->getConfigPath().'/'.$this->config['datasources'];
         }
 
         return $this->datasources;
     }
 
     /**
-     * @return string
+     * @return array
      * @throws \ReflectionException
      */
-    public function getDependencies(): string
+    public function getDependencies(): array
     {
         if (!$this->dependencies) {
-            $this->dependencies = $this->getConfigPath().'/'.$this->config['dependencies'];
+            $this->dependencies = include_once $this->getConfigPath().'/'.$this->config['dependencies'];
         }
 
         return $this->dependencies;
     }
 
     /**
-     * @return string
+     * @return array
      * @throws \ReflectionException
      */
-    public function getRoutes(): string
+    public function getRoutes(): array
     {
         if (!$this->routes) {
-            $this->routes = $this->getConfigPath().'/'.$this->config['routes'];
+            $this->routes = include_once $this->getConfigPath().'/'.$this->config['routes'];
         }
 
         return $this->routes;
     }
 
     /**
-     * @return string
+     * @return array
      * @throws \ReflectionException
      */
-    public function getMiddlewares(): string
+    public function getMiddlewares(): array
     {
         if (!$this->middlewares) {
-            $this->middlewares = $this->getConfigPath().'/'.$this->config['middlewares'];
+            $this->middlewares = include_once $this->getConfigPath().'/'.$this->config['middlewares'];
         }
 
         return $this->middlewares;

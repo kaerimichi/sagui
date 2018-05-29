@@ -6,15 +6,11 @@ namespace Infrastructure\Service\Collector;
 class DatasourceCollector extends Collector
 {
     /**
-     * @param string $definitionPath
+     * @param array $definitionPath
      */
-    public function addDefinition(string $definitionPath): void
+    public function addDefinition(array $definitionPath): void
     {
-        if (!is_file($definitionPath)) {
-            return;
-        }
-
-        $this->bag = array_merge($this->bag, include $definitionPath);
+        $this->bag = array_merge($this->bag, $definitionPath);
     }
 
     /**

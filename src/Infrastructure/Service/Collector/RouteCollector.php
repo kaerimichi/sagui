@@ -3,23 +3,13 @@ declare(strict_types=1);
 
 namespace Infrastructure\Service\Collector;
 
-use Infrastructure\Exception\FileNotFoundException;
-
 class RouteCollector extends Collector
 {
     /**
-     * @param string $definitionPath
-     * @throws FileNotFoundException
+     * @param array $definitions
      */
-    public function addDefinition(string $definitionPath): void
+    public function addDefinition(array $definitions): void
     {
-        if (!is_file($definitionPath)) {
-            throw new FileNotFoundException('The path is wrong or the file don\'t exist.');
-        }
-
-        /** @var array $appRoutes */
-        $appRoutes = include $definitionPath;
-
-        $this->bag = array_merge($this->bag, $appRoutes);
+        $this->bag = array_merge($this->bag, $definitions);
     }
 }

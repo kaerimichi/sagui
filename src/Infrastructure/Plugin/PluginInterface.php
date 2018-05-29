@@ -26,17 +26,17 @@ interface PluginInterface
     public function getConfigPath(): string;
 
     /**
-     * @return string
+     * @return array
      */
-    public function getDatasources(): string;
+    public function getDatasources(): array;
 
     /**
-     * @return string
+     * @return array
      */
-    public function getDependencies(): string;
+    public function getDependencies(): array;
 
     /**
-     * @return string
+     * @return array
      */
-    public function getRoutes(): string;
+    public function getRoutes(): array;
 }

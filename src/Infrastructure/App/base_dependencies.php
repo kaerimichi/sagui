@@ -57,29 +57,31 @@ return [
         };
     },
     RouteCollector::class => function (ContainerInterface $c) {
-        $routeCollector = new RouteCollector();
+        if (is_file($c->get('app_path').'/App/config/routes.php')) {
+            $defaultRoutes = include_once $c->get('app_path').'/App/config/routes.php';
+        }
 
-        $routeCollector->addDefinition($c->get('app_path').'/App/config/routes.php');
+        $routeCollector = new RouteCollector();
+        $routeCollector->addDefinition($defaultRoutes ?? []);
 
         $pluginCollector = $c->get(PluginCollector::class);
 
         /** @var \Infrastructure\Plugin\Plugin $plugin */
         foreach ($pluginCollector as $plugin) {
-            $routeCollector->addDefinition($plugin->getConfigPath().'/routes.php');
+            $routeCollector->addDefinition($plugin->getRoutes());
         }
 
         return $routeCollector;
-    },
-    PluginCollector::class => function (ContainerInterface $c) {
-        $pluginCollector = new PluginCollector();
-        $pluginCollector->addDefinition($c->get('app_path').'/App/config/plugins.php');
-        return $pluginCollector;
     },
     DatasourceCollector::class => function (ContainerInterface $c) {
         $dsCollector = new DatasourceCollector();
         $pluginCollector = $c->get(PluginCollector::class);
 
-        $dsCollector->addDefinition(\dirname(__DIR__, 2).'/config/datasources.php');
+        $plugins = [];
+        if (is_file($c->get('app_path').'/config/datasources.php')) {
+            $dsCollector->addDefinition(include_once $c->get('app_path').'/config/datasources.php');
+        }
+
         /** @var \Infrastructure\Plugin\Plugin $plugin */
         foreach ($pluginCollector as $plugin) {
             $dsCollector->addDefinition($plugin->getDatasources());

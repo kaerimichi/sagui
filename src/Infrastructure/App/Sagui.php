@@ -45,7 +45,11 @@ class Sagui extends \Slim\App
     protected function definePluginsDependencies(ContainerBuilder $builder): ContainerBuilder
     {
         $pluginCollector = new PluginCollector();
-        $pluginCollector->addDefinition(\dirname(__DIR__, 2).'/App/config/plugins.php');
+        $pluginCollector->addDefinition(include \dirname(__DIR__, 2).'/App/config/plugins.php');
+
+        $builder->addDefinitions([PluginCollector::class => function () use ($pluginCollector) {
+            return $pluginCollector;
+        }]);
 
         /** @var Plugin $plugin */
         foreach ($pluginCollector as $plugin) {

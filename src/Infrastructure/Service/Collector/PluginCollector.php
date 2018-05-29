@@ -9,17 +9,11 @@ use Infrastructure\Plugin\PluginInterface;
 class PluginCollector extends Collector
 {
     /**
-     * @param string $definitionPath
+     * @param array $definition
      */
-    public function addDefinition(string $definitionPath): void
+    public function addDefinition(array $definition): void
     {
-        if (!is_file($definitionPath)) {
-            return;
-        }
-
-        /** @var array $plugins */
-        $plugins = include $definitionPath;
-        foreach ($plugins as $plugin) {
+        foreach ($definition as $plugin) {
             $instance = new $plugin;
 
             if (!$instance instanceof PluginInterface) {
