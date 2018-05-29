@@ -5,10 +5,9 @@ namespace Plugin\Admin\Middleware;
 
 use Aura\Auth\Auth;
 use Aura\Auth\Service\ResumeService;
-use MongoDB\Driver\Exception\AuthenticationException;
+use Infrastructure\Exception\InvalidSessionException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Http\Response;
 
 class SessionVerifier
 {
@@ -38,12 +37,13 @@ class SessionVerifier
      * @param ResponseInterface $response
      * @param callable $next
      * @return mixed
+     * @throws InvalidSessionException
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
         $this->resumeService->resume($this->auth);
         if ($this->auth->isExpired()) {
-            throw new AuthenticationException('Your login is expired.', 403);
+            throw new InvalidSessionException('expired_session', 'Your login is expired.');
         }
 
         return $next($request, $response);
