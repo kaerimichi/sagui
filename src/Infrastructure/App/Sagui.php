@@ -6,16 +6,12 @@ namespace Infrastructure\App;
 use DI\ContainerBuilder;
 use Infrastructure\Controller\FrontendController;
 use Infrastructure\Plugin\Plugin;
-use Infrastructure\Service\PluginCollector;
-use Infrastructure\Service\RouteCollector;
+use Infrastructure\Service\Collector\MiddlewareCollector;
+use Infrastructure\Service\Collector\PluginCollector;
+use Infrastructure\Service\Collector\RouteCollector;
 
 class Sagui extends \Slim\App
 {
-    /**
-     * @var RouteCollector
-     */
-    private $routeCollector;
-
     /**
      * Sagui constructor.
      * @throws \Exception
@@ -37,8 +33,8 @@ class Sagui extends \Slim\App
 
     public function bootstrap(): void
     {
-        $this->routeCollector = $this->getContainer()->get(RouteCollector::class);
-        $this->defineRoutes();
+        $this->defineRoutes($this->getContainer()->get(RouteCollector::class));
+        $this->defineMiddlewares($this->getContainer()->get(MiddlewareCollector::class));
     }
 
     /**
@@ -49,7 +45,7 @@ class Sagui extends \Slim\App
     protected function definePluginsDependencies(ContainerBuilder $builder): ContainerBuilder
     {
         $pluginCollector = new PluginCollector();
-        $pluginCollector->load(\dirname(__DIR__, 2).'/App/config/plugins.php');
+        $pluginCollector->addDefinition(\dirname(__DIR__, 2).'/App/config/plugins.php');
 
         /** @var Plugin $plugin */
         foreach ($pluginCollector as $plugin) {
@@ -77,9 +73,12 @@ class Sagui extends \Slim\App
         return $builder;
     }
 
-    protected function defineRoutes(): void
+    /**
+     * @param RouteCollector $routeCollector
+     */
+    protected function defineRoutes(RouteCollector $routeCollector): void
     {
-        foreach ($this->routeCollector as $pathConf => $actionConf) {
+        foreach ($routeCollector as $pathConf => $actionConf) {
             [$verb, $path] = explode('@', $pathConf);
             [$controller, $method] = explode('::', $actionConf);
 
@@ -88,5 +87,15 @@ class Sagui extends \Slim\App
 
         $this->get('/', [FrontendController::class, 'home']);
         $this->get('/{params:.*}', [FrontendController::class, 'handler']);
+    }
+
+    /**
+     * @param MiddlewareCollector $middlewareCollector
+     */
+    protected function defineMiddlewares(MiddlewareCollector $middlewareCollector): void
+    {
+        foreach ($middlewareCollector as $middleware) {
+            $this->add($middleware);
+        }
     }
 }

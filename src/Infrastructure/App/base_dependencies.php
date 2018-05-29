@@ -2,9 +2,10 @@
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\ContainerInterface;
-use Infrastructure\Service\RouteCollector;
-use Infrastructure\Service\PluginCollector;
-use Infrastructure\Service\DatasourceCollector;
+use Infrastructure\Service\Collector\RouteCollector;
+use Infrastructure\Service\Collector\PluginCollector;
+use Infrastructure\Service\Collector\DatasourceCollector;
+use Infrastructure\Service\Collector\MiddlewareCollector;
 use Infrastructure\Service\Renderer\TwigRenderer;
 
 return [
@@ -58,31 +59,44 @@ return [
     RouteCollector::class => function (ContainerInterface $c) {
         $routeCollector = new RouteCollector();
 
-        $routeCollector->addRoutesDefinition(
-            $c->get('app_path').'/App/config/routes.php',
-            'default'
-        );
+        $routeCollector->addDefinition($c->get('app_path').'/App/config/routes.php');
 
         $pluginCollector = $c->get(PluginCollector::class);
-        /**
-         * @var string $name
-         * @var \Infrastructure\Plugin\Plugin $plugin
-         */
-        foreach ($pluginCollector as $name => $plugin) {
-            $routeCollector->addRoutesDefinition($plugin->getConfigPath().'/routes.php', $name);
+
+        /** @var \Infrastructure\Plugin\Plugin $plugin */
+        foreach ($pluginCollector as $plugin) {
+            $routeCollector->addDefinition($plugin->getConfigPath().'/routes.php');
         }
 
         return $routeCollector;
     },
     PluginCollector::class => function (ContainerInterface $c) {
         $pluginCollector = new PluginCollector();
-        $pluginCollector->load($c->get('app_path').'/App/config/plugins.php');
+        $pluginCollector->addDefinition($c->get('app_path').'/App/config/plugins.php');
         return $pluginCollector;
     },
     DatasourceCollector::class => function (ContainerInterface $c) {
         $dsCollector = new DatasourceCollector();
-        $dsCollector->collect($c->get(PluginCollector::class));
+        $pluginCollector = $c->get(PluginCollector::class);
+
+        $dsCollector->addDefinition(\dirname(__DIR__, 2).'/config/datasources.php');
+        /** @var \Infrastructure\Plugin\Plugin $plugin */
+        foreach ($pluginCollector as $plugin) {
+            $dsCollector->addDefinition($plugin->getDatasources());
+        }
+
         return $dsCollector;
+    },
+    MiddlewareCollector::class => function (ContainerInterface $c) {
+        $mwCollector = new MiddlewareCollector();
+        $pluginCollector = $c->get(PluginCollector::class);
+
+        /** @var \Infrastructure\Plugin\Plugin $plugin */
+        foreach ($pluginCollector as $plugin) {
+            $mwCollector->addDefinition($plugin->getMiddlewares());
+        }
+
+        return $mwCollector;
     },
     TwigRenderer::class => function(ContainerInterface $c) {
         $templates = [$c->get('theme') => $c->get('base_path').'/themes/'.$c->get('theme')];

@@ -29,6 +29,7 @@ abstract class Plugin implements PluginInterface
         'datasources' => 'datasources.php',
         'dependencies' => 'dependencies.php',
         'routes' => 'routes.php',
+        'middlewares' => 'middlewares.php'
     ];
 
     /**
@@ -45,6 +46,11 @@ abstract class Plugin implements PluginInterface
      * @var string
      */
     private $routes;
+
+    /**
+     * @var string
+     */
+    private $middlewares;
 
     /**
      * @param array $config
@@ -130,5 +136,18 @@ abstract class Plugin implements PluginInterface
         }
 
         return $this->routes;
+    }
+
+    /**
+     * @return string
+     * @throws \ReflectionException
+     */
+    public function getMiddlewares(): string
+    {
+        if (!$this->middlewares) {
+            $this->middlewares = $this->getConfigPath().'/'.$this->config['middlewares'];
+        }
+
+        return $this->middlewares;
     }
 }
