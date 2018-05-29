@@ -17,7 +17,9 @@ class MiddlewareCollector extends Collector
             throw new FileNotFoundException('The path is wrong or the file don\'t exist.');
         }
 
-        /** @var array $appRoutes */
-        $this->bag = array_merge($this->bag, include $definitionPath);
+        $middlewares = include $definitionPath;
+        foreach ($middlewares as $middleware => $conf) {
+            $this->bag[$conf['priority']] = $middleware;
+        }
     }
 }
