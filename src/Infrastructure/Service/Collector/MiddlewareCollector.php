@@ -19,7 +19,11 @@ class MiddlewareCollector extends Collector
 
         $middlewares = include $definitionPath;
         foreach ($middlewares as $middleware => $conf) {
-            $this->bag[$conf['priority']] = $middleware;
+            if (isset($conf['priority'])) {
+                $this->bag[$conf['priority']] = $middleware;
+            } else {
+                $this->bag[] = $middleware;
+            }
         }
     }
 }
