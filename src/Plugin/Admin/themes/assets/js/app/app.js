@@ -1,11 +1,12 @@
 const instance = axios.create({
-  baseURL: 'http://192.168.99.100:8080/admin/'
+  baseURL: 'http://192.168.99.100:8080/admin'
 });
 
 const router = new VueRouter({
     routes: [
       { path: '/register', component: Register, name: 'register' },
       { path: '/login', component: Login, name: 'login' },
+      { path: '/', component: Dashboard, name: 'dashboard' },
     ],
 })
 
@@ -31,17 +32,15 @@ const store = new Vuex.Store({
       params.append('email', form.email);
       params.append('password', form.password);
 
-      return axios.post('admin/create', params)
+      return axios.post('/admin/create', params)
     },
     attemptLogin: (store, form) => {
-      console.log('login')
-
       const params = new URLSearchParams();
 
       params.append('email', form.email);
       params.append('password', form.password);
 
-      return axios.post('admin/login', params)
+      return axios.post('/admin/authorize', params)
     }
   }
 })
@@ -51,6 +50,7 @@ new Vue({
     components: {
         'login': Login,
         'register': Register,
+        'dashboard': Dashboard
     },
     router: router,
     store: store

@@ -20,6 +20,7 @@ var Login = {
       this.$store.dispatch('attemptLogin', {email: this.email, password: this.password})
         .then(() => {
           vm.$store.commit('logged')
+          this.$router.push('/')
         })
     }
   },

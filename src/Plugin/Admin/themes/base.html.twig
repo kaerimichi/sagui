@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {% block stylesheets %}
+  {% block stylesheets %}
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
-    {% endblock %}
+  {% endblock %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 <body>
 <div id="app">
-    {% block body %}{% endblock %}
+  {% block body %}{% endblock %}
 </div>
 
 {% block javascripts %}
-    {{ addJs('@admin/themes/assets/js/vendor/vue.js') }}
-    {{ addJs('@admin/themes/assets/js/vendor/vuex.js') }}
-    {{ addJs('@admin/themes/assets/js/vendor/vue-router.js') }}
-    {{ addJs('@admin/themes/assets/js/vendor/vuetify.js') }}
-    {{ addJs('@admin/themes/assets/js/vendor/axios.min.js') }}
-    {{ addJs('@admin/themes/assets/js/app/login.js') }}
-    {{ addJs('@admin/themes/assets/js/app/register.js') }}
-    {{ addJs('@admin/themes/assets/js/app/app.js') }}
-    {{ showJs()|raw }}
+  {{ addJs('@admin/themes/assets/js/vendor/vue.js') }}
+  {{ addJs('@admin/themes/assets/js/vendor/vuex.js') }}
+  {{ addJs('@admin/themes/assets/js/vendor/vue-router.js') }}
+  {{ addJs('@admin/themes/assets/js/vendor/vuetify.js') }}
+  {{ addJs('@admin/themes/assets/js/vendor/axios.min.js') }}
+  {{ addJs('@admin/themes/assets/js/app/login.js') }}
+  {{ addJs('@admin/themes/assets/js/app/register.js') }}
+  {{ addJs('@admin/themes/assets/js/app/dashboard.js') }}
+  {{ addJs('@admin/themes/assets/js/app/app.js') }}
+  {{ showJs()|raw }}
 {% endblock %}
 
 </body>
