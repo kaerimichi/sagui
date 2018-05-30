@@ -7,6 +7,7 @@ use Infrastructure\Service\Collector\PluginCollector;
 use Infrastructure\Service\Collector\DatasourceCollector;
 use Infrastructure\Service\Collector\MiddlewareCollector;
 use Infrastructure\Service\Renderer\TwigRenderer;
+use Infrastructure\Service\Utils;
 
 return [
     'base_path' => \dirname(__DIR__, 3),
@@ -27,6 +28,10 @@ return [
     },
     'errorHandler' => function (ContainerInterface $c) {
         return function (ServerRequestInterface $request, \Psr\Http\Message\ResponseInterface $response, Exception $e) use ($c) {
+            if ($e instanceof \Infrastructure\Exception\InvalidSessionException) {
+                return $response->withRedirect('/');
+            }
+
             $trace = $e->getTrace();
 
             $data = [
@@ -57,9 +62,7 @@ return [
         };
     },
     RouteCollector::class => function (ContainerInterface $c) {
-        if (is_file($c->get('app_path').'/App/config/routes.php')) {
-            $defaultRoutes = include_once $c->get('app_path').'/App/config/routes.php';
-        }
+        $defaultRoutes = Utils::loadConfigFile($c->get('app_path').'/App/config/routes.php');
 
         $routeCollector = new RouteCollector();
         $routeCollector->addDefinition($defaultRoutes ?? []);
@@ -77,10 +80,7 @@ return [
         $dsCollector = new DatasourceCollector();
         $pluginCollector = $c->get(PluginCollector::class);
 
-        $plugins = [];
-        if (is_file($c->get('app_path').'/config/datasources.php')) {
-            $dsCollector->addDefinition(include_once $c->get('app_path').'/config/datasources.php');
-        }
+        $dsCollector->addDefinition(Utils::loadConfigFile($c->get('app_path').'/config/datasources.php'));
 
         /** @var \Infrastructure\Plugin\Plugin $plugin */
         foreach ($pluginCollector as $plugin) {
@@ -133,5 +133,14 @@ return [
     },
     \Atlas\Orm\Atlas::class => function (ContainerInterface $c) {
         return $c->get(\Atlas\Orm\AtlasContainer::class)->getAtlas();
+    },
+    \Aura\Session\Randval::class => function () {
+        return new \Aura\Session\Randval(new \Aura\Session\Phpfunc());
+    },
+    \Aura\Session\CsrfTokenFactory::class => function (ContainerInterface $c) {
+        return new \Aura\Session\CsrfTokenFactory($c->get(\Aura\Session\Randval::class));
+    },
+    \Aura\Session\Session::class => function () {
+        return (new \Aura\Session\SessionFactory())->newInstance($_COOKIE);
     },
 ];
