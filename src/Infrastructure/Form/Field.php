@@ -49,17 +49,16 @@ class Field
 
     /**
      * @param array $rules
-     * @return Form
      */
-    public function rules(array $rules)
+    public function rules(array $rules): void
     {
         $this->rules = $rules;
     }
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getRules(): array
+    public function getRules(): ?array
     {
         return $this->rules;
     }
