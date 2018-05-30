@@ -6,13 +6,13 @@ const router = new VueRouter({
     routes: [
       { path: '/register', component: Register, name: 'register' },
       { path: '/login', component: Login, name: 'login' },
-      { path: '/', component: Dashboard, name: 'dashboard' },
+      { path: '/list', component: List, name: 'list' },
     ],
 })
 
 const store = new Vuex.Store({
   state: {
-    logged: false
+    logged: true
   },
   mutations: {
     logged (state) {
@@ -50,7 +50,8 @@ new Vue({
     components: {
         'login': Login,
         'register': Register,
-        'dashboard': Dashboard
+        'dashboard': Dashboard,
+        'list': List
     },
     router: router,
     store: store
