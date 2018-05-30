@@ -7,7 +7,7 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiController
 {
-    public function createPost(RequestInterface $request): void
+    public function createPost(): void
     {
         echo 1;exit;
     }

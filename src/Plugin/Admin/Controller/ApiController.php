@@ -5,7 +5,6 @@ namespace Plugin\Admin\Controller;
 
 use Aura\Auth\Auth;
 use Infrastructure\Controller\AbstractController;
-use Plugin\Admin\Datasource\User\UserMapper;
 use Plugin\Admin\Handler\LoginUser;
 use Plugin\Admin\Handler\RegisterUser;
 use Psr\Http\Message\ResponseInterface;
@@ -36,7 +35,7 @@ class ApiController extends AbstractController
      * @param LoginUser $loginUser
      * @param Auth $auth
      * @return ResponseInterface
-     * @throws \Infrastructure\Exception\HandlerException
+     * @throws \Infrastructure\Exception\InvalidLoginException
      */
     public function login(Request $request, LoginUser $loginUser, Auth $auth)
     {
