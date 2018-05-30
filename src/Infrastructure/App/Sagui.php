@@ -40,6 +40,7 @@ class Sagui extends \Slim\App
     /**
      * @param ContainerBuilder $builder
      * @return ContainerBuilder
+     * @throws \Infrastructure\Exception\FileNotFoundException
      * @throws \ReflectionException
      */
     protected function definePluginsDependencies(ContainerBuilder $builder): ContainerBuilder
@@ -53,7 +54,7 @@ class Sagui extends \Slim\App
 
         /** @var Plugin $plugin */
         foreach ($pluginCollector as $plugin) {
-            $builder->addDefinitions($plugin->getConfigPath().'/dependencies.php');
+            $builder->addDefinitions($plugin->getDependencies());
         }
 
         return $builder;
@@ -90,7 +91,6 @@ class Sagui extends \Slim\App
         }
 
         $this->get('/', [FrontendController::class, 'home']);
-        $this->get('/{params:.*}', [FrontendController::class, 'handler']);
     }
 
     /**
