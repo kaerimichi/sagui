@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Infrastructure\Plugin;
 
+use Infrastructure\Service\Utils;
+
 abstract class Plugin implements PluginInterface
 {
     /**
@@ -23,13 +25,14 @@ abstract class Plugin implements PluginInterface
     /**
      * @var array
      */
-    private $config = [
+    private $pathConfig = [
         'config_path' => '/config',
         'template_path' => '/themes',
         'datasources' => 'datasources.php',
         'dependencies' => 'dependencies.php',
         'routes' => 'routes.php',
-        'middlewares' => 'middlewares.php'
+        'middlewares' => 'middlewares.php',
+        'config' => 'config.php'
     ];
 
     /**
@@ -53,11 +56,16 @@ abstract class Plugin implements PluginInterface
     private $middlewares;
 
     /**
+     * @var array
+     */
+    private $config;
+
+    /**
      * @param array $config
      */
-    public function config(array $config): void
+    public function pathConfig(array $config): void
     {
-        $this->config = array_merge($this->config, $config);
+        $this->pathConfig = array_merge($this->pathConfig, $config);
     }
 
     /**
@@ -80,7 +88,7 @@ abstract class Plugin implements PluginInterface
     public function getTemplatePath(): string
     {
         if (!$this->templatePath) {
-            $this->templatePath = $this->getPath().$this->config['template_path'];
+            $this->templatePath = $this->getPath().$this->pathConfig['template_path'];
         }
 
         return $this->templatePath;
@@ -93,7 +101,7 @@ abstract class Plugin implements PluginInterface
     public function getConfigPath(): string
     {
         if (!$this->configPath) {
-            $this->configPath = $this->getPath().$this->config['config_path'];
+            $this->configPath = $this->getPath().$this->pathConfig['config_path'];
         }
 
         return $this->configPath;
@@ -101,12 +109,13 @@ abstract class Plugin implements PluginInterface
 
     /**
      * @return array
+     * @throws \Infrastructure\Exception\FileNotFoundException
      * @throws \ReflectionException
      */
     public function getDatasources(): array
     {
         if (!$this->datasources) {
-            $this->datasources = include_once $this->getConfigPath().'/'.$this->config['datasources'];
+            $this->datasources = Utils::loadConfigFile($this->getConfigPath().'/'.$this->pathConfig['datasources']);
         }
 
         return $this->datasources;
@@ -114,12 +123,13 @@ abstract class Plugin implements PluginInterface
 
     /**
      * @return array
+     * @throws \Infrastructure\Exception\FileNotFoundException
      * @throws \ReflectionException
      */
     public function getDependencies(): array
     {
         if (!$this->dependencies) {
-            $this->dependencies = include_once $this->getConfigPath().'/'.$this->config['dependencies'];
+            $this->dependencies = Utils::loadConfigFile($this->getConfigPath().'/'.$this->pathConfig['dependencies']);
         }
 
         return $this->dependencies;
@@ -127,12 +137,13 @@ abstract class Plugin implements PluginInterface
 
     /**
      * @return array
+     * @throws \Infrastructure\Exception\FileNotFoundException
      * @throws \ReflectionException
      */
     public function getRoutes(): array
     {
         if (!$this->routes) {
-            $this->routes = include_once $this->getConfigPath().'/'.$this->config['routes'];
+            $this->routes = Utils::loadConfigFile($this->getConfigPath().'/'.$this->pathConfig['routes']);
         }
 
         return $this->routes;
@@ -140,14 +151,29 @@ abstract class Plugin implements PluginInterface
 
     /**
      * @return array
+     * @throws \Infrastructure\Exception\FileNotFoundException
      * @throws \ReflectionException
      */
     public function getMiddlewares(): array
     {
         if (!$this->middlewares) {
-            $this->middlewares = include_once $this->getConfigPath().'/'.$this->config['middlewares'];
+            $this->middlewares = Utils::loadConfigFile($this->getConfigPath().'/'.$this->pathConfig['middlewares']);
         }
 
         return $this->middlewares;
+    }
+
+    /**
+     * @return array
+     * @throws \Infrastructure\Exception\FileNotFoundException
+     * @throws \ReflectionException
+     */
+    public function getConfig(): array
+    {
+        if (!$this->config) {
+            $this->config = Utils::loadConfigFile($this->getConfigPath().'/'.$this->pathConfig['config']);
+        }
+
+        return $this->config;
     }
 }
