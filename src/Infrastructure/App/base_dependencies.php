@@ -28,10 +28,6 @@ return [
     },
     'errorHandler' => function (ContainerInterface $c) {
         return function (ServerRequestInterface $request, \Psr\Http\Message\ResponseInterface $response, Exception $e) use ($c) {
-            if ($e instanceof \Infrastructure\Exception\InvalidSessionException) {
-                return $response->withRedirect('/');
-            }
-
             $trace = $e->getTrace();
 
             $data = [
