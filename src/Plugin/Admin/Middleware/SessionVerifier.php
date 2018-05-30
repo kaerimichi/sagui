@@ -43,7 +43,7 @@ class SessionVerifier
     {
         $this->resumeService->resume($this->auth);
         if ($this->auth->isExpired()) {
-            throw new InvalidSessionException('expired_session', 'Your login is expired.');
+            $response->withRedirect('admin/login');
         }
 
         return $next($request, $response);
