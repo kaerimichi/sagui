@@ -32,5 +32,5 @@ return [
     },
     Auth::class => function (ContainerInterface $c) {
         return $c->get(AuthFactory::class)->newInstance();
-    }
+    },
 ];
