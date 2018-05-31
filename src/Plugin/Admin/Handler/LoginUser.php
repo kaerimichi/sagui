@@ -6,13 +6,7 @@ namespace Plugin\Admin\Handler;
 use Atlas\Orm\Atlas;
 use Aura\Auth\Auth;
 use Aura\Auth\Service\LoginService;
-use Aura\Auth\Verifier\PasswordVerifier;
-use Infrastructure\Exception\HandlerException;
 use Infrastructure\Exception\InvalidLoginException;
-use Infrastructure\Exception\ValidationException;
-use Infrastructure\Form\FormPersistHelper;
-use Plugin\Admin\Datasource\User\UserMapper;
-use Plugin\Admin\Handler\Form\UserForm;
 
 class LoginUser
 {
