@@ -5,6 +5,7 @@ namespace Plugin\Admin\Controller;
 
 use Aura\Auth\Auth;
 use Infrastructure\Controller\AbstractController;
+use Plugin\Admin\Handler\CreatePost;
 use Plugin\Admin\Handler\LoginUser;
 use Plugin\Admin\Handler\RegisterUser;
 use Psr\Http\Message\ResponseInterface;
@@ -33,13 +34,32 @@ class ApiController extends AbstractController
     /**
      * @param Request $request
      * @param LoginUser $loginUser
-     * @param Auth $auth
      * @return ResponseInterface
      * @throws \Infrastructure\Exception\InvalidLoginException
      */
-    public function login(Request $request, LoginUser $loginUser, Auth $auth)
+    public function login(Request $request, LoginUser $loginUser)
     {
         $loginUser($request->getParam('email'), $request->getParam('password'));
         return $this->renderJson([], 204);
+    }
+
+    /**
+     * @param Request $request
+     * @param CreatePost $createPost
+     * @return ResponseInterface
+     * @throws \Infrastructure\Exception\HandlerException
+     * @throws \Infrastructure\Exception\NotFoundException
+     * @throws \Infrastructure\Exception\ValidationException
+     */
+    public function createPost(Request $request, CreatePost $createPost)
+    {
+        $res = $createPost(
+            $request->getParam('title'),
+            $request->getParam('body'),
+            $request->getParam('tags', []),
+            $this->getAuth()->getUserName()
+        );
+
+        return $this->renderJson($res, 200);
     }
 }
