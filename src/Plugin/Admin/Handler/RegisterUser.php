@@ -6,6 +6,7 @@ namespace Plugin\Admin\Handler;
 use Atlas\Orm\Atlas;
 use Infrastructure\Exception\HandlerException;
 use Infrastructure\Exception\ValidationException;
+use Infrastructure\Form\Form;
 use Infrastructure\Form\FormPersistHelper;
 use Plugin\Admin\Datasource\User\UserMapper;
 use Plugin\Admin\Handler\Form\UserForm;
@@ -18,9 +19,9 @@ class RegisterUser
     private $helper;
 
     /**
-     * @var UserForm
+     * @var Form
      */
-    private $userForm;
+    private $form;
 
     /**
      * @var Atlas
@@ -30,13 +31,13 @@ class RegisterUser
     /**
      * RegisterUser constructor.
      * @param FormPersistHelper $helper
-     * @param UserForm $userForm
+     * @param Form $form
      * @param Atlas $atlas
      */
-    public function __construct(FormPersistHelper $helper, UserForm $userForm, Atlas $atlas)
+    public function __construct(FormPersistHelper $helper, Form $form, Atlas $atlas)
     {
         $this->helper = $helper;
-        $this->userForm = $userForm;
+        $this->form = $form;
         $this->atlas = $atlas;
     }
 
@@ -56,14 +57,19 @@ class RegisterUser
             ->fetchRecord();
 
         if ($user) {
-            throw new HandlerException('email_not_available', 'Another user has this email.');
+            throw new HandlerException('email_not_available', 'Try with another email.');
         }
 
-        $encodePwd = password_hash($password, PASSWORD_ARGON2I);
+        $this->form
+            ->field('name', $name)->rules(['length' => [4, 100]])
+            ->field('password_clean_text', $password)->rules(['length' => [4, 100]])
+            ->field('password', password_hash($password, PASSWORD_ARGON2I))
+            ->field('email', $email)->rules(['email']);
+
         $record = $this->helper
             ->mapper(UserMapper::class)
-            ->form($this->userForm)
-            ->register(['name' => $name, 'email' => $email, 'password' => $encodePwd]);
+            ->form($this->form)
+            ->register();
 
         return $record->getArrayCopy();
     }
