@@ -52,18 +52,17 @@ class FormPersistHelper
     }
 
     /**
-     * @param array $data
      * @return RecordInterface
      * @throws HandlerException
      * @throws ValidationException
      */
-    public function register(array $data): RecordInterface
+    public function register(): RecordInterface
     {
-        if (!$this->form->check($data)) {
+        if (!$this->form->validate()) {
             throw new ValidationException($this->form->getErrors());
         }
 
-        array_merge($data, ['created_at' => (new \DateTime())->format('Y-m-d H:i:s')]);
+        $data = array_merge($this->form->getData(), ['created_at' => (new \DateTime())->format('Y-m-d H:i:s')]);
         $record = $this->atlas->newRecord($this->mapper, $data);
 
         if (!$this->atlas->insert($record)) {

@@ -6,7 +6,7 @@ namespace Infrastructure\Form;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator;
 
-abstract class Form
+class Form implements \ArrayAccess
 {
     /**
      * @var Validator
@@ -28,11 +28,25 @@ abstract class Form
      */
     private $actualField;
 
-    /**
-     * @param array $data
-     * @return bool
-     */
-    abstract public function check(array $data): bool;
+    public function offsetExists($offset): bool
+    {
+        return isset($this->fields[$offset]);
+    }
+
+    public function offsetGet($offset): ?Field
+    {
+        return $this->fields[$offset] ?? null;
+    }
+
+    public function offsetSet($offset, $value): self
+    {
+        return $this->field($offset, $value);
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->fields[$offset]);
+    }
 
     /**
      * @param string $field
@@ -48,6 +62,20 @@ abstract class Form
     }
 
     /**
+     * @return array
+     */
+    public function getData(): array
+    {
+        $out = [];
+        /** @var Field $field */
+        foreach ($this->fields as $field) {
+            $out[$field->getField()] = $field->getValue();
+        }
+
+        return $out;
+    }
+
+    /**
      * @param array $fields
      * @return Form
      */
@@ -56,9 +84,8 @@ abstract class Form
         $this->fields[$this->actualField]->rules($fields);
         return $this;
     }
-    
+
     /**
-     * @param array $data
      * @return bool
      */
     public function validate(): bool
@@ -69,15 +96,8 @@ abstract class Form
 
         /** @var Field $field */
         foreach ($this->fields as $field) {
-            foreach ($field->getRules() as $name => $params) {
-                if (\is_string($params)) {
-                    $this->validator->addRule($params);
-                } else {
-                    $this->validator->addRule($name, $params);
-                }
-            }
-
             try {
+                $this->addValidatorRules($field);
                 $this->validator->assert($field->getValue());
             } catch (NestedValidationException $exception) {
                 $this->errors[$field->getField()] = $exception->getMessages();
@@ -87,6 +107,20 @@ abstract class Form
         }
 
         return $this->errors === null;
+    }
+
+    /**
+     * @param Field $field
+     */
+    protected function addValidatorRules(Field $field): void
+    {
+        foreach ($field->getRules() as $name => $params) {
+            if (\is_string($params)) {
+                $this->validator->addRule($params);
+            } else {
+                $this->validator->addRule($name, $params);
+            }
+        }
     }
 
     /**
