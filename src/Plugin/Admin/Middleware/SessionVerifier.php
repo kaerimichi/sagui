@@ -60,7 +60,7 @@ class SessionVerifier
 
         $whitelistUrl = $this->admin->getConfig()['session_whitelist'];
         foreach ($whitelistUrl as $url) {
-            if ($route->getPattern() === $url) {
+            if ($route && $route->getPattern() === $url) {
                 return $next($request, $response);
             }
         }
