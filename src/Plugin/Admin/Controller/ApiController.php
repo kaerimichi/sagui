@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Plugin\Admin\Controller;
 
-use Aura\Auth\Auth;
 use Infrastructure\Controller\AbstractController;
 use Plugin\Admin\Handler\CreatePost;
 use Plugin\Admin\Handler\LoginUser;
 use Plugin\Admin\Handler\RegisterUser;
+use Plugin\Admin\Handler\UpdatePost;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 
@@ -58,6 +58,28 @@ class ApiController extends AbstractController
             $request->getParam('body'),
             $request->getParam('tags', []),
             $this->getAuth()->getUserName()
+        );
+
+        return $this->renderJson($res, 200);
+    }
+
+    /**
+     * @param int $id
+     * @param Request $request
+     * @param UpdatePost $updatePost
+     * @return ResponseInterface
+     * @throws \Infrastructure\Exception\HandlerException
+     * @throws \Infrastructure\Exception\NotFoundException
+     * @throws \Infrastructure\Exception\ValidationException
+     */
+    public function updatePost(int $id, Request $request, UpdatePost $updatePost)
+    {
+        $res = $updatePost(
+            $id,
+            $request->getParam('title'),
+            $request->getParam('body'),
+            $request->getParam('tags', []),
+            $request->getParam('published')
         );
 
         return $this->renderJson($res, 200);
