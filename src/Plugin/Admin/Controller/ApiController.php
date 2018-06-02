@@ -4,6 +4,10 @@ declare(strict_types=1);
 namespace Plugin\Admin\Controller;
 
 use Infrastructure\Controller\AbstractController;
+use Infrastructure\Service\Search\PaginateSearch;
+use Infrastructure\Service\Search\PaginatorParams;
+use Plugin\Admin\Datasource\Post\PostMapper;
+use Plugin\Admin\Datasource\User\UserMapper;
 use Plugin\Admin\Handler\CreatePost;
 use Plugin\Admin\Handler\LoginUser;
 use Plugin\Admin\Handler\RegisterUser;
@@ -83,5 +87,16 @@ class ApiController extends AbstractController
         );
 
         return $this->renderJson($res, 201);
+    }
+
+    /**
+     * @param Request $request
+     * @param PaginateSearch $paginateSearch
+     * @return ResponseInterface
+     */
+    public function paginatePosts(Request $request, PaginateSearch $paginateSearch)
+    {
+        $page = $paginateSearch->findByPage(PostMapper::class, new PaginatorParams($request));
+        return $this->renderJson($page->toArray(), 201);
     }
 }
