@@ -5,6 +5,8 @@ namespace Infrastructure\Form;
 
 use Atlas\Orm\Atlas;
 use Atlas\Orm\Mapper\RecordInterface;
+use Aura\SqlQuery\Common\SelectInterface;
+use Aura\SqlQuery\Sqlite\Select;
 use Infrastructure\Exception\HandlerException;
 use Infrastructure\Exception\NotFoundException;
 use Infrastructure\Exception\ValidationException;
@@ -52,15 +54,23 @@ class FormPersistHelper
     }
 
     /**
+     * @throws ValidationException
+     */
+    private function validate(): void
+    {
+        if (!$this->form->validate()) {
+            throw new ValidationException($this->form->getErrors());
+        }
+    }
+
+    /**
      * @return RecordInterface
      * @throws HandlerException
      * @throws ValidationException
      */
     public function register(): RecordInterface
     {
-        if (!$this->form->validate()) {
-            throw new ValidationException($this->form->getErrors());
-        }
+        $this->validate();
 
         $data = array_merge($this->form->getData(), ['created_at' => (new \DateTime())->format('Y-m-d H:i:s')]);
         $record = $this->atlas->newRecord($this->mapper, $data);
@@ -73,20 +83,44 @@ class FormPersistHelper
     }
 
     /**
-     * @param array $data
      * @param int $id
      * @return RecordInterface
      * @throws HandlerException
      * @throws NotFoundException
      * @throws ValidationException
      */
-    public function update(array $data, int $id): RecordInterface
+    public function updateById(int $id): RecordInterface
     {
-        if (!$this->form->check($data)) {
-            throw new ValidationException($this->form->getErrors());
+        return $this->update($this->atlas->fetchRecord($this->mapper, $id));
+    }
+
+    /**
+     * @param array $criteria
+     * @return RecordInterface
+     * @throws HandlerException
+     * @throws NotFoundException
+     * @throws ValidationException
+     */
+    public function updateByCriteria(array $criteria): RecordInterface
+    {
+        /** @var SelectInterface $select */
+        $select = $this->atlas->select($this->mapper);
+        foreach ($criteria as $criterion) {
+            $select = $select->where($criterion);
         }
 
-        $record = $this->atlas->fetchRecord($this->mapper, $id);
+        return $this->update($select->fetchRecord());
+    }
+
+    /**
+     * @param RecordInterface|null $record
+     * @return RecordInterface
+     * @throws HandlerException
+     * @throws NotFoundException
+     * @throws ValidationException
+     */
+    protected function update(?RecordInterface $record): RecordInterface
+    {
         if (!$record) {
             throw new NotFoundException(
                 'entity_not_found',
@@ -95,7 +129,14 @@ class FormPersistHelper
             );
         }
 
-        $record->set($data);
+        $this->validate();
+
+        $merged = array_merge(
+            $record->getArrayCopy(),
+            $this->form->getData(),
+            ['updated_at' => (new \DateTime())->format('Y-m-d H:i:s')]
+        );
+        $record->set($merged);
 
         if (!$this->atlas->update($record)) {
             throw new HandlerException($this->atlas->getException()->getMessage());
