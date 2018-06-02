@@ -82,6 +82,6 @@ class ApiController extends AbstractController
             $request->getParam('published')
         );
 
-        return $this->renderJson($res, 200);
+        return $this->renderJson($res, 201);
     }
 }
