@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace Plugin\Admin\Handler;
 
-use Atlas\Orm\Atlas;
 use Infrastructure\Exception\HandlerException;
 use Infrastructure\Exception\ValidationException;
 use Infrastructure\Form\Form;
 use Infrastructure\Form\FormPersistHelper;
+use Infrastructure\Service\Search\SimpleSearch;
 use Plugin\Admin\Datasource\User\UserMapper;
-use Plugin\Admin\Handler\Form\UserForm;
 
 class RegisterUser
 {
@@ -24,21 +23,21 @@ class RegisterUser
     private $form;
 
     /**
-     * @var Atlas
+     * @var SimpleSearch
      */
-    private $atlas;
+    private $finder;
 
     /**
      * RegisterUser constructor.
      * @param FormPersistHelper $helper
      * @param Form $form
-     * @param Atlas $atlas
+     * @param SimpleSearch $finder
      */
-    public function __construct(FormPersistHelper $helper, Form $form, Atlas $atlas)
+    public function __construct(FormPersistHelper $helper, Form $form, SimpleSearch $finder)
     {
         $this->helper = $helper;
         $this->form = $form;
-        $this->atlas = $atlas;
+        $this->finder = $finder;
     }
 
     /**
@@ -51,11 +50,7 @@ class RegisterUser
      */
     public function __invoke(string $name, string $email, string $password): array
     {
-        $user = $this->atlas
-            ->select(UserMapper::class)
-            ->where('email = ?', $email)
-            ->fetchRecord();
-
+        $user = $this->finder->findOneBy(UserMapper::class, ['email = ?' => $email]);
         if ($user) {
             throw new HandlerException('email_not_available', 'Try with another email.');
         }

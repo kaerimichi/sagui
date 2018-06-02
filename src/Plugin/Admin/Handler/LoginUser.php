@@ -3,18 +3,12 @@ declare(strict_types=1);
 
 namespace Plugin\Admin\Handler;
 
-use Atlas\Orm\Atlas;
 use Aura\Auth\Auth;
 use Aura\Auth\Service\LoginService;
 use Infrastructure\Exception\InvalidLoginException;
 
 class LoginUser
 {
-    /**
-     * @var Atlas
-     */
-    private $atlas;
-
     /**
      * @var LoginService
      */
@@ -27,13 +21,11 @@ class LoginUser
 
     /**
      * LoginUser constructor.
-     * @param Atlas $atlas
      * @param LoginService $loginService
      * @param Auth $auth
      */
-    public function __construct(Atlas $atlas, LoginService $loginService, Auth $auth)
+    public function __construct(LoginService $loginService, Auth $auth)
     {
-        $this->atlas = $atlas;
         $this->loginService = $loginService;
         $this->auth = $auth;
     }

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Plugin\Admin\Handler;
 
-use Atlas\Orm\Atlas;
 use Infrastructure\Exception\NotFoundException;
 use Infrastructure\Form\Form;
 use Infrastructure\Form\FormPersistHelper;
@@ -22,34 +21,28 @@ class UpdatePost
     private $form;
 
     /**
-     * @var Atlas
-     */
-    private $atlas;
-
-    /**
-     * CreatePost constructor.
+     * UpdatePost constructor.
      * @param FormPersistHelper $helper
      * @param Form $form
-     * @param Atlas $atlas
      */
-    public function __construct(FormPersistHelper $helper, Form $form, Atlas $atlas)
+    public function __construct(FormPersistHelper $helper, Form $form)
     {
         $this->helper = $helper;
         $this->form = $form;
-        $this->atlas = $atlas;
     }
 
     /**
      * @param int $id
-     * @param string $title
-     * @param string $body
-     * @param array $tags
-     * @param bool $published
+     * @param null|string $title
+     * @param null|string $body
+     * @param array|null $tags
+     * @param bool|null $published
      * @return array
      * @throws NotFoundException
      * @throws \Infrastructure\Exception\HandlerException
      * @throws \Infrastructure\Exception\ValidationException
      */
+    public function __invoke(int $id, ?string $title, ?string $body, ?array $tags, ?bool $published): array
     {
         $this->form
             ->field('title', $title)->rules(['length' => [4, 255]])
