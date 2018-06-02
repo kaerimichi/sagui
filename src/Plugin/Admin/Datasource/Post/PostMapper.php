@@ -2,6 +2,7 @@
 namespace Plugin\Admin\Datasource\Post;
 
 use Atlas\Orm\Mapper\AbstractMapper;
+use Plugin\Admin\Datasource\User\UserMapper;
 
 /**
  * @inheritdoc
@@ -13,6 +14,9 @@ class PostMapper extends AbstractMapper
      */
     protected function setRelated()
     {
-        // no related fields
+        $this->manyToOne('author', UserMapper::CLASS)
+            ->on([
+                'user_id' => 'id',
+            ]);
     }
 }
