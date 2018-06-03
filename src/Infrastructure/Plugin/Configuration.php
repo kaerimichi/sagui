@@ -57,12 +57,16 @@ class Configuration implements \ArrayAccess
         $this->configTemplate = $this->plugin->getConfigTemplate();
 
         $record = $this->atlas
-            ->select(ConfigurationMapper::class, ['plugin' => $this->className])
+            ->select(ConfigurationMapper::class, ['alias' => $this->plugin->getAlias()])
             ->fetchRecord();
 
         if (!$record) {
             $this->config = $this->createConfig();
             return $this;
+        }
+
+        if ($record->name !== $this->className) {
+            throw new \LogicException("The alias `{$this->plugin->getAlias()}` is already used in another plugin");
         }
 
         $this->config = $this->updateChanges($record);
