@@ -8,7 +8,7 @@ interface PluginInterface
     /**
      * @return string
      */
-    public function getName(): string;
+    public function getAlias(): string;
 
     /**
      * @param array $config

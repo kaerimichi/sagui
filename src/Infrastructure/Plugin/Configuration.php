@@ -20,7 +20,7 @@ class Configuration implements \ArrayAccess
     private $atlas;
 
     /**
-     * @var string
+     * @var PluginInterface
      */
     private $plugin;
 
@@ -30,16 +30,20 @@ class Configuration implements \ArrayAccess
     private $config;
 
     /**
-     * Configuration constructor.
-     * @param array $configTemplate
-     * @param Atlas $atlas
-     * @param string $plugin
+     * @var string
      */
-    public function __construct(array $configTemplate, Atlas $atlas, string $plugin)
+    private $className;
+
+    /**
+     * Configuration constructor.
+     * @param PluginInterface $plugin
+     * @param Atlas $atlas
+     */
+    public function __construct(PluginInterface $plugin, Atlas $atlas)
     {
-        $this->configTemplate = $configTemplate;
         $this->atlas = $atlas;
         $this->plugin = $plugin;
+        $this->className = \get_class($plugin);
     }
 
     /**
@@ -50,9 +54,10 @@ class Configuration implements \ArrayAccess
         if ($this->config) {
             return $this;
         }
+        $this->configTemplate = $this->plugin->getConfigTemplate();
 
         $record = $this->atlas
-            ->select(ConfigurationMapper::class, ['plugin' => $this->plugin])
+            ->select(ConfigurationMapper::class, ['plugin' => $this->className])
             ->fetchRecord();
 
         if (!$record) {
@@ -109,7 +114,8 @@ class Configuration implements \ArrayAccess
         $record = $this->atlas->newRecord(
             ConfigurationMapper::class,
             [
-                'plugin' => $this->plugin,
+                'plugin' => \get_class($this->plugin),
+                'alias' => $this->plugin->getAlias(),
                 'data' => json_encode($data),
                 'active' => true,
                 'created_at' => (new \DateTime())->format('Y-m-d h:i:s')

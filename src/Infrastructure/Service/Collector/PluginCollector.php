@@ -25,7 +25,7 @@ class PluginCollector extends Collector
          * @var PluginInterface $plugin
          */
         foreach ($this->bag as $name => &$plugin) {
-            $config = new Configuration($plugin->getConfigTemplate(), $atlas, $name);
+            $config = new Configuration($plugin, $atlas);
             $config->loadConfig();
             $plugin->setConfig($config);
         }
@@ -44,7 +44,7 @@ class PluginCollector extends Collector
             }
 
             $this->bag[$plugin] = $instance;
-            $this->alias[$instance->getName()] = $plugin;
+            $this->alias[$instance->getAlias()] = $plugin;
         }
     }
 

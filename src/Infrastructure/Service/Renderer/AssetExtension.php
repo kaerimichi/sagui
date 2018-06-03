@@ -58,10 +58,10 @@ class AssetExtension extends \Twig_Extension
             throw new \DomainException("No plugin with alias `{$plugin}` was found.");
         }
 
-        $fullPath = str_replace('@'.$plugin->getName(), \dirname($plugin->getTemplatePath()), $path);
+        $fullPath = str_replace('@'.$plugin->getAlias(), \dirname($plugin->getTemplatePath()), $path);
 
-        $publicPath = str_replace('@'.$plugin->getName(), '', $path);
-        $publicPath = '/application/public/assets/plugins/'.$plugin->getName().$publicPath;
+        $publicPath = str_replace('@'.$plugin->getAlias(), '', $path);
+        $publicPath = '/application/public/assets/plugins/'.$plugin->getAlias().$publicPath;
 
         if (!is_dir(\dirname($publicPath))) {
             mkdir(\dirname($publicPath), 755, true);
@@ -69,8 +69,8 @@ class AssetExtension extends \Twig_Extension
         copy($fullPath, $publicPath);
 
         return str_replace(
-            '@'.$plugin->getName(),
-            $this->uri->getBaseUrl().'/assets/plugins/'.$plugin->getName(),
+            '@'.$plugin->getAlias(),
+            $this->uri->getBaseUrl().'/assets/plugins/'.$plugin->getAlias(),
             $path
         );
     }

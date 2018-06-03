@@ -105,7 +105,7 @@ return [
         $pluginCollector = $c->get(PluginCollector::class);
         /** @var \Infrastructure\Plugin\Plugin $plugin */
         foreach ($pluginCollector as $plugin) {
-            $templates[$plugin->getName()] = $plugin->getTemplatePath();
+            $templates[$plugin->getAlias()] = $plugin->getTemplatePath();
         }
 
         $assets = new \Stolz\Assets\Manager([
