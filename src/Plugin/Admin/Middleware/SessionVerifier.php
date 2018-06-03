@@ -6,6 +6,7 @@ namespace Plugin\Admin\Middleware;
 use Aura\Auth\Auth;
 use Aura\Auth\Service\ResumeService;
 use Infrastructure\Exception\InvalidSessionException;
+use Infrastructure\Service\Collector\PluginCollector;
 use Plugin\Admin\Admin;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
@@ -32,13 +33,13 @@ class SessionVerifier
      * SessionVerifier constructor.
      * @param ResumeService $resumeService
      * @param Auth $auth
-     * @param Admin $admin
+     * @param PluginCollector $collector
      */
-    public function __construct(ResumeService $resumeService, Auth $auth, Admin $admin)
+    public function __construct(ResumeService $resumeService, Auth $auth, PluginCollector $collector)
     {
         $this->resumeService = $resumeService;
         $this->auth = $auth;
-        $this->admin = $admin;
+        $this->admin = $collector->find(Admin::class);
     }
 
     /**
@@ -47,8 +48,6 @@ class SessionVerifier
      * @param callable $next
      * @return mixed
      * @throws InvalidSessionException
-     * @throws \Infrastructure\Exception\FileNotFoundException
-     * @throws \ReflectionException
      */
     public function __invoke(ServerRequestInterface $request, Response $response, callable $next)
     {
@@ -57,7 +56,8 @@ class SessionVerifier
         /** @var Route $route */
         $route = $request->getAttributes()['route'];
 
-        $whitelistUrl = $this->admin->getConfig()['session_whitelist'];
+        $config = $this->admin->getConfig();
+        $whitelistUrl = $config['session_whitelist'];
         foreach ($whitelistUrl as $url) {
             if ($route && $route->getPattern() === $url) {
                 return $next($request, $response);
