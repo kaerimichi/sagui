@@ -30,6 +30,7 @@ class CreateTableConfiguration extends AbstractMigration
     {
         $users = $this->table('configurations');
         $users->addColumn('plugin', 'string', ['limit' => 255, 'null' => false])
+            ->addColumn('alias', 'string', ['limit' => 255, 'null' => false])
             ->addColumn('data', 'text', ['null' => false, 'default' => '{}'])
             ->addColumn('active', 'boolean', ['null' => false, 'default' => false])
             ->addColumn('created_at', 'datetime')

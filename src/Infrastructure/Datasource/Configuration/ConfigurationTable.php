@@ -31,6 +31,7 @@ class ConfigurationTable extends AbstractTable
             'active',
             'created_at',
             'updated_at',
+            'alias',
         ];
     }
 
@@ -100,6 +101,16 @@ class ConfigurationTable extends AbstractTable
                 'autoinc' => false,
                 'primary' => false,
             ],
+            'alias' => (object) [
+                'name' => 'alias',
+                'type' => 'varchar',
+                'size' => 255,
+                'scale' => null,
+                'notnull' => false,
+                'default' => null,
+                'autoinc' => false,
+                'primary' => false,
+            ],
         ];
     }
 
@@ -133,6 +144,7 @@ class ConfigurationTable extends AbstractTable
             'active' => null,
             'created_at' => null,
             'updated_at' => null,
+            'alias' => null,
         ];
     }
 }
