@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Infrastructure\App;
 
+use Atlas\Orm\Atlas;
 use DI\ContainerBuilder;
 use Infrastructure\Controller\FrontendController;
 use Infrastructure\Plugin\Plugin;
@@ -33,8 +34,15 @@ class Sagui extends \Slim\App
 
     public function bootstrap(): void
     {
+        $this->loadPluginConfig();
         $this->defineRoutes($this->getContainer()->get(RouteCollector::class));
         $this->defineMiddlewares($this->getContainer()->get(MiddlewareCollector::class));
+    }
+
+    public function loadPluginConfig(): void
+    {
+        $this->getContainer()->get(PluginCollector::class)
+            ->bootPlugins($this->getContainer()->get(Atlas::class));
     }
 
     /**

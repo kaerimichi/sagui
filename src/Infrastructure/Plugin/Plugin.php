@@ -56,9 +56,14 @@ abstract class Plugin implements PluginInterface
     private $middlewares;
 
     /**
-     * @var array
+     * @var Configuration
      */
     private $config;
+
+    /**
+     * @var array
+     */
+    private $configTemplate;
 
     /**
      * @param array $config
@@ -66,6 +71,19 @@ abstract class Plugin implements PluginInterface
     public function pathConfig(array $config): void
     {
         $this->pathConfig = array_merge($this->pathConfig, $config);
+    }
+
+    /**
+     * @return string
+     * @throws \ReflectionException
+     */
+    public function getConfigPath(): string
+    {
+        if (!$this->configPath) {
+            $this->configPath = $this->getPath().$this->pathConfig['config_path'];
+        }
+
+        return $this->configPath;
     }
 
     /**
@@ -95,16 +113,19 @@ abstract class Plugin implements PluginInterface
     }
 
     /**
-     * @return string
+     * @return array
+     * @throws \Infrastructure\Exception\FileNotFoundException
      * @throws \ReflectionException
      */
-    public function getConfigPath(): string
+    public function getConfigTemplate(): array
     {
-        if (!$this->configPath) {
-            $this->configPath = $this->getPath().$this->pathConfig['config_path'];
+        if (!$this->configTemplate) {
+            $this->configTemplate = Utils::loadConfigFile(
+                $this->getPath().$this->pathConfig['config_path'].'/'.$this->pathConfig['config']
+            );
         }
 
-        return $this->configPath;
+        return $this->configTemplate;
     }
 
     /**
@@ -164,16 +185,18 @@ abstract class Plugin implements PluginInterface
     }
 
     /**
-     * @return array
-     * @throws \Infrastructure\Exception\FileNotFoundException
-     * @throws \ReflectionException
+     * @param Configuration $config
      */
-    public function getConfig(): array
+    public function setConfig(Configuration $config): void
     {
-        if (!$this->config) {
-            $this->config = Utils::loadConfigFile($this->getConfigPath().'/'.$this->pathConfig['config']);
-        }
+        $this->config = $config;
+    }
 
-        return $this->config;
+    /**
+     * @return Configuration
+     */
+    public function getConfig(): Configuration
+    {
+        return $this->config->loadConfig();
     }
 }

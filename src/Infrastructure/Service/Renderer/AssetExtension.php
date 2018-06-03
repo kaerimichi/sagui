@@ -55,7 +55,7 @@ class AssetExtension extends \Twig_Extension
         $plugin = $this->pluginCollector->find(str_replace('@', '', $name));
 
         if (!$plugin) {
-            throw new \DomainException();
+            throw new \DomainException("No plugin with alias `{$plugin}` was found.");
         }
 
         $fullPath = str_replace('@'.$plugin->getName(), \dirname($plugin->getTemplatePath()), $path);
