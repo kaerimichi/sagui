@@ -1,5 +1,5 @@
 <?php
-namespace Plugin\Admin\Datasource\Configuration;
+namespace Infrastructure\Datasource\Configuration;
 
 use Atlas\Orm\Mapper\AbstractMapper;
 

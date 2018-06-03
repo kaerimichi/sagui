@@ -5,7 +5,7 @@ namespace Infrastructure\Plugin;
 
 use Atlas\Orm\Atlas;
 use Atlas\Orm\Mapper\RecordInterface;
-use Plugin\Admin\Datasource\Configuration\ConfigurationMapper;
+use Infrastructure\Datasource\Configuration\ConfigurationMapper;
 
 class Configuration implements \ArrayAccess
 {
