@@ -59,8 +59,41 @@ class Configuration implements \ArrayAccess
             $record = $this->createConfig();
         }
 
-        $this->config = json_decode($record->getArrayCopy()['data'], true);
+        $this->config = $this->updateChanges($record);
+
         return $this;
+    }
+
+    /**
+     * @param RecordInterface $record
+     * @return array
+     */
+    private function updateChanges(RecordInterface $record): array
+    {
+        $actualConfig = json_decode($record->getArrayCopy()['data'], true);
+
+        $actualFields = array_keys($actualConfig);
+        $templateFields = array_keys($this->configTemplate);
+
+        $newTemplateFields = array_diff($templateFields, $actualFields);
+        $removedTemplateFields = array_diff($actualFields, $templateFields);
+
+        if ($newTemplateFields) {
+            foreach ($newTemplateFields as $templateField) {
+                $actualConfig[$templateField] = $this->configTemplate[$templateField]['default'];
+            }
+        }
+
+        if ($removedTemplateFields) {
+            foreach ($removedTemplateFields as $templateField) {
+                unset($actualConfig[$templateField]);
+            }
+        }
+
+        $record->data = json_encode($actualConfig);
+        $this->atlas->update($record);
+
+        return $actualConfig;
     }
 
     /**

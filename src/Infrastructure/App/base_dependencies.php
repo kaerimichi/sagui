@@ -76,6 +76,9 @@ return [
         $dsCollector = new DatasourceCollector();
         $pluginCollector = $c->get(PluginCollector::class);
 
+        $dsCollector->addDefinition(Utils::loadConfigFile(
+            $c->get('base_path').'/src/Infrastructure/App/datasources.php')
+        );
         $dsCollector->addDefinition(Utils::loadConfigFile($c->get('app_path').'/config/datasources.php'));
 
         /** @var \Infrastructure\Plugin\Plugin $plugin */
