@@ -6,9 +6,9 @@ namespace Infrastructure\Form;
 use Atlas\Orm\Atlas;
 use Atlas\Orm\Mapper\RecordInterface;
 use Aura\SqlQuery\Common\SelectInterface;
-use Aura\SqlQuery\Sqlite\Select;
 use Infrastructure\Exception\HandlerException;
 use Infrastructure\Exception\NotFoundException;
+use Infrastructure\Exception\PersistenceException;
 use Infrastructure\Exception\ValidationException;
 
 class FormPersistHelper
@@ -65,7 +65,7 @@ class FormPersistHelper
 
     /**
      * @return RecordInterface
-     * @throws HandlerException
+     * @throws PersistenceException
      * @throws ValidationException
      */
     public function register(): RecordInterface
@@ -76,7 +76,7 @@ class FormPersistHelper
         $record = $this->atlas->newRecord($this->mapper, $data);
 
         if (!$this->atlas->insert($record)) {
-            throw new HandlerException($this->atlas->getException()->getMessage());
+            throw new PersistenceException('user_register_error', $this->atlas->getException());
         }
 
         return $record;
@@ -85,8 +85,8 @@ class FormPersistHelper
     /**
      * @param int $id
      * @return RecordInterface
-     * @throws HandlerException
      * @throws NotFoundException
+     * @throws PersistenceException
      * @throws ValidationException
      */
     public function updateById(int $id): RecordInterface
@@ -97,8 +97,8 @@ class FormPersistHelper
     /**
      * @param array $criteria
      * @return RecordInterface
-     * @throws HandlerException
      * @throws NotFoundException
+     * @throws PersistenceException
      * @throws ValidationException
      */
     public function updateByCriteria(array $criteria): RecordInterface
@@ -115,8 +115,8 @@ class FormPersistHelper
     /**
      * @param RecordInterface|null $record
      * @return RecordInterface
-     * @throws HandlerException
      * @throws NotFoundException
+     * @throws PersistenceException
      * @throws ValidationException
      */
     protected function update(?RecordInterface $record): RecordInterface
@@ -139,7 +139,7 @@ class FormPersistHelper
         $record->set($merged);
 
         if (!$this->atlas->update($record)) {
-            throw new HandlerException($this->atlas->getException()->getMessage());
+            throw new PersistenceException('user_update_error', $this->atlas->getException());
         }
 
         return $record;
