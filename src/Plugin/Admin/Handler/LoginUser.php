@@ -6,6 +6,10 @@ namespace Plugin\Admin\Handler;
 use Aura\Auth\Auth;
 use Aura\Auth\Service\LoginService;
 use Infrastructure\Exception\InvalidLoginException;
+use Aura\Auth\Exception\UsernameMissing;
+use Aura\Auth\Exception\PasswordMissing;
+use Aura\Auth\Exception\UsernameNotFound;
+use Aura\Auth\Exception\PasswordIncorrect;
 
 class LoginUser
 {
@@ -40,18 +44,17 @@ class LoginUser
     {
         try {
             $this->loginService->login($this->auth, ['username' => $email, 'password' => $password]);
-        } catch (\Aura\Auth\Exception\UsernameMissing $e) {
+            return true;
+        } catch (UsernameMissing $e) {
             throw new InvalidLoginException('username_empty', "The 'username' field is missing or empty.");
-        } catch (\Aura\Auth\Exception\PasswordMissing $e) {
+        } catch (PasswordMissing $e) {
             throw new InvalidLoginException('password_empty', "The 'password' field is missing or empty.");
-        } catch (\Aura\Auth\Exception\UsernameNotFound $e) {
+        } catch (UsernameNotFound $e) {
             throw new InvalidLoginException('username_not_found', "The username you entered was not found.");
-        } catch (\Aura\Auth\Exception\PasswordIncorrect $e) {
+        } catch (PasswordIncorrect $e) {
             throw new InvalidLoginException('incorrect_password', "The password you entered was incorrect.");
         } catch (InvalidLoginException $e) {
             throw new InvalidLoginException('login_general_error', "Invalid login details. Please try again.");
         }
-
-        return true;
     }
 }

@@ -7,7 +7,6 @@ use Aura\Auth\Auth;
 use Aura\Auth\Service\ResumeService;
 use Infrastructure\Exception\InvalidSessionException;
 use Plugin\Admin\Admin;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
 use Slim\Route;

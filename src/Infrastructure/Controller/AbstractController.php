@@ -37,6 +37,7 @@ class AbstractController
      * @param TwigRenderer $renderer
      * @param Atlas $atlas
      * @param Auth $auth
+     * @param Session $session
      */
     public function __construct(TwigRenderer $renderer, Atlas $atlas, Auth $auth, Session $session)
     {

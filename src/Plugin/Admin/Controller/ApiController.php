@@ -7,7 +7,6 @@ use Infrastructure\Controller\AbstractController;
 use Infrastructure\Service\Search\PaginateSearch;
 use Infrastructure\Service\Search\PaginatorParams;
 use Plugin\Admin\Datasource\Post\PostMapper;
-use Plugin\Admin\Datasource\User\UserMapper;
 use Plugin\Admin\Handler\CreatePost;
 use Plugin\Admin\Handler\LoginUser;
 use Plugin\Admin\Handler\RegisterUser;
@@ -60,7 +59,7 @@ class ApiController extends AbstractController
         $res = $createPost(
             $request->getParam('title'),
             $request->getParam('body'),
-            $request->getParam('tags', []),
+            $request->getParam('tags'),
             $this->getAuth()->getUserName()
         );
 
@@ -82,7 +81,7 @@ class ApiController extends AbstractController
             $id,
             $request->getParam('title'),
             $request->getParam('body'),
-            $request->getParam('tags', []),
+            $request->getParam('tags'),
             $request->getParam('published')
         );
 

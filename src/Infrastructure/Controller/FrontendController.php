@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Infrastructure\Controller;
 
-use Plugin\Admin\Datasource\User\UserMapper;
-
 class FrontendController extends AbstractController
 {
     public function handler()

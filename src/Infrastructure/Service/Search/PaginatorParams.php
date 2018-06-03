@@ -23,7 +23,6 @@ class PaginatorParams
     /**
      * PaginatorParams constructor.
      * @param Request $request
-     * @param string $mapper
      */
     public function __construct(Request $request)
     {
