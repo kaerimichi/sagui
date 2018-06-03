@@ -93,10 +93,11 @@ class ApiController extends AbstractController
      * @param Request $request
      * @param PaginateSearch $paginateSearch
      * @return ResponseInterface
+     * @throws \Atlas\Orm\Exception
      */
     public function paginatePosts(Request $request, PaginateSearch $paginateSearch)
     {
-        $page = $paginateSearch->findByPage(PostMapper::class, new PaginatorParams($request));
+        $page = $paginateSearch->findByPage(PostMapper::class, new PaginatorParams($request), ['author']);
         return $this->renderJson($page->toArray(), 201);
     }
 }
