@@ -56,11 +56,11 @@ class Configuration implements \ArrayAccess
             ->fetchRecord();
 
         if (!$record) {
-            $record = $this->createConfig();
+            $this->config = $this->createConfig();
+            return $this;
         }
 
         $this->config = $this->updateChanges($record);
-
         return $this;
     }
 
@@ -97,9 +97,9 @@ class Configuration implements \ArrayAccess
     }
 
     /**
-     * @return RecordInterface
+     * @return array
      */
-    private function createConfig(): RecordInterface
+    private function createConfig(): array
     {
         $data = [];
         foreach ($this->configTemplate as $name => $config) {
@@ -117,7 +117,7 @@ class Configuration implements \ArrayAccess
         );
         $this->atlas->insert($record);
 
-        return $record;
+        return $record->getArrayCopy();
     }
 
     public function offsetExists($offset)
