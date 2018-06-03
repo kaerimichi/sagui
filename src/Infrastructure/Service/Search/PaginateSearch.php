@@ -8,15 +8,21 @@ class PaginateSearch extends SimpleSearch
     /**
      * @param string $mapper
      * @param PaginatorParams $params
+     * @param array $with
      * @return Page
+     * @throws \Atlas\Orm\Exception
      */
-    public function findByPage(string $mapper, PaginatorParams $params): Page
+    public function findByPage(string $mapper, PaginatorParams $params, array $with = []): Page
     {
         $criteria = $params->parseCriteria($this->atlas->mapper($mapper)->getTable()->getCols());
 
         $select = $this->atlas->select($mapper);
         foreach ($criteria as $field => $value) {
             $select = $select->where($field, $value);
+        }
+
+        if (\count($with) > 0) {
+            $select = $select->with($with);
         }
 
         $offset = ($params->getPage()-1) * $params->getPageSize();
