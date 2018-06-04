@@ -65,7 +65,7 @@ class Configuration implements \ArrayAccess
             return $this;
         }
 
-        if ($record->name !== $this->className) {
+        if ($record->plugin !== $this->className) {
             throw new \LogicException("The alias `{$this->plugin->getAlias()}` is already used in another plugin");
         }
 
